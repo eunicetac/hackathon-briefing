@@ -99,21 +99,21 @@
     /* Divider */
     .divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
 
-    /* Group cards */
-    .group-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-    .group-card {
+    /* Team cards */
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+    .team-card {
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: 12px; padding: 1rem 1.25rem;
       transition: border-color 0.2s, background 0.2s;
     }
-    .group-card:hover { border-color: var(--border-bright); background: var(--bg-card-hover); }
-    .group-num {
+    .team-card:hover { border-color: var(--border-bright); background: var(--bg-card-hover); }
+    .team-num {
       font-family: 'Space Mono', monospace; font-size: 10px;
       letter-spacing: 0.08em; text-transform: uppercase;
       color: var(--accent); margin-bottom: 6px;
     }
-    .group-name { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
-    .group-domain { font-size: 12px; color: var(--text-tertiary); font-style: italic; }
+    .team-name { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+    .team-domain { font-size: 12px; color: var(--text-tertiary); font-style: italic; }
 
     /* Timeline */
     .step-list { display: flex; flex-direction: column; }
@@ -194,7 +194,7 @@
   <div class="hero">
     <div class="badge"><i class="ti ti-terminal-2"></i> AI-Enabled Engineering Hackathon</div>
     <h1>Welcome to the<br><span>AI-Enabled</span> Engineering Hackathon</h1>
-    <p>Everything you need for the week — resources, your group details, and key links — all in one place.</p>
+    <p>Everything you need for the week — resources, your team details, and key links — all in one place.</p>
   </div>
 
   <div class="nudge">
@@ -208,12 +208,12 @@
   </div>
 
   <div class="section">
-    <div class="section-label"><i class="ti ti-users" style="font-size:13px;color:var(--accent)"></i> Your groups</div>
-    <div class="group-grid">
-      <div class="group-card"><div class="group-num">Group 01</div><div class="group-name">TBD</div><div class="group-domain">Domain TBD</div></div>
-      <div class="group-card"><div class="group-num">Group 02</div><div class="group-name">TBD</div><div class="group-domain">Domain TBD</div></div>
-      <div class="group-card"><div class="group-num">Group 03</div><div class="group-name">TBD</div><div class="group-domain">Domain TBD</div></div>
-      <div class="group-card"><div class="group-num">Group 04</div><div class="group-name">TBD</div><div class="group-domain">Domain TBD</div></div>
+    <div class="section-label"><i class="ti ti-users" style="font-size:13px;color:var(--accent)"></i> Your teams</div>
+    <div class="team-grid">
+      <div class="team-card"><div class="team-num">Team 01</div><div class="team-name">TBD</div><div class="team-domain">Domain TBD</div></div>
+      <div class="team-card"><div class="team-num">Team 02</div><div class="team-name">TBD</div><div class="team-domain">Domain TBD</div></div>
+      <div class="team-card"><div class="team-num">Team 03</div><div class="team-name">TBD</div><div class="team-domain">Domain TBD</div></div>
+      <div class="team-card"><div class="team-num">Team 04</div><div class="team-name">TBD</div><div class="team-domain">Domain TBD</div></div>
     </div>
   </div>
 
@@ -226,7 +226,7 @@
         <div class="step-body">
           <div class="step-meta">Mon, 25 May <span class="pill pill-inperson"><i class="ti ti-building" style="font-size:10px;"></i> In-person</span></div>
           <div class="step-title">Kickoff</div>
-          <div class="step-desc">The Director opens the hackathon, followed by a Q&amp;A on the problem statements. Teams confirm their choice in the room, then start building in the afternoon.</div>
+          <div class="step-desc">Opening speech by Dir, sharing of the problem statements. Teams to confirm their choice, then start building!</div>
           <div class="sub-list">
             <div class="sub-item"><i class="ti ti-microphone"></i><span>Opening by Director — morning</span></div>
             <div class="sub-item"><i class="ti ti-message-question"></i><span>Q&amp;A on problem statements — teams ask questions and confirm their choice</span></div>
@@ -284,7 +284,7 @@
   <div class="section">
     <div class="section-label"><i class="ti ti-credit-card" style="font-size:13px;color:var(--accent)"></i> API credits</div>
     <div class="prose-card">
-      <p>Each group receives a fixed credit allocation via Zenmux. Treat this as part of the challenge — efficient, well-structured prompts go further. If your group runs low, review your prompting approach before requesting more.</p>
+      <p>Each team receives a fixed credit allocation via Zenmux. Treat this as part of the challenge — efficient, well-structured prompts go further. If your team runs low, review your prompting approach before requesting more.</p>
     </div>
   </div>
 
