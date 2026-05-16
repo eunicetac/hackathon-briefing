@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI-Enabled Engineering Hackathon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #111111;
+      --bg-card: #1e1e1e;
+      --bg-card-hover: #252525;
+      --bg-subtle: #1a1a1a;
+      --border: #2e2e2e;
+      --border-bright: #3a3a3a;
+      --text-primary: #f0f0f0;
+      --text-secondary: #b0b0b0;
+      --text-tertiary: #888888;
+      --accent: #3ecf8e;
+      --accent-bg: #0d2e1e;
+      --accent-text: #6ee7b7;
+      --green: #3ecf8e;
+      --green-bg: #0d2e1e;
+      --green-text: #6ee7b7;
+      --amber: #f59e0b;
+      --amber-bg: #2a1f08;
+      --amber-text: #fcd34d;
+      --teal: #14b8a6;
+      --teal-bg: #0a1f1d;
+      --teal-text: #5eead4;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    .container { max-width: 740px; margin: 0 auto; }
+
+    /* Hero */
+    .hero { margin-bottom: 2.5rem; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--accent-bg); color: var(--accent-text);
+      border: 1px solid #1a4d30; padding: 5px 12px; border-radius: 6px;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: 30px; font-weight: 700; color: #f0f0f0;
+      line-height: 1.3; margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p { font-size: 15px; color: var(--text-secondary); line-height: 1.75; font-weight: 300; }
+
+    /* Bookmark nudge */
+    .nudge {
+      display: flex; align-items: flex-start; gap: 10px;
+      background: var(--bg-subtle); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px; font-size: 13px; color: var(--text-secondary);
+      margin-bottom: 2rem; line-height: 1.6;
+    }
+    .nudge i { color: var(--accent); font-size: 16px; margin-top: 1px; flex-shrink: 0; }
+
+    /* Info chips */
+    .info-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 999px; padding: 5px 14px;
+      font-size: 12px; color: var(--text-secondary);
+      font-family: 'Space Mono', monospace;
+    }
+    .chip i { font-size: 13px; color: var(--accent); }
+
+    /* Section */
+    .section { margin-bottom: 2.5rem; }
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-tertiary);
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* Divider */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+    /* Group cards */
+    .group-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+    .group-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1rem 1.25rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .group-card:hover { border-color: var(--border-bright); background: var(--bg-card-hover); }
+    .group-num {
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 6px;
+    }
+    .group-name { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+    .group-domain { font-size: 12px; color: var(--text-tertiary); font-style: italic; }
+
+    /* Timeline */
+    .step-list { display: flex; flex-direction: column; }
+    .step { display: flex; gap: 14px; align-items: flex-start; padding-bottom: 1.5rem; }
+    .step:last-child { padding-bottom: 0; }
+    .step-left { display: flex; flex-direction: column; align-items: center; min-width: 28px; }
+    .step-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--bg-card); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-family: 'Space Mono', monospace;
+      color: var(--text-tertiary); flex-shrink: 0;
+    }
+    .step-dot.active { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+    .step-dot.success { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+    .step-dot.warning { background: var(--amber-bg); border-color: var(--amber); color: var(--amber); }
+    .step-dot.today { background: var(--teal-bg); border-color: var(--teal); color: var(--teal); }
+    .step-dot.past { opacity: 0.35; }
+    .step-line { width: 1px; flex: 1; background: var(--border); margin-top: 4px; min-height: 20px; }
+    .step:last-child .step-line { display: none; }
+    .step-body { padding-top: 3px; }
+    .step-body.past { opacity: 0.4; }
+    .step-meta {
+      font-family: 'Space Mono', monospace; font-size: 10px;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: #aaaaaa; margin-bottom: 4px;
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    }
+    .step-title { font-size: 16px; font-weight: 600; color: #f0f0f0; margin-bottom: 5px; }
+    .step-desc { font-size: 14px; color: #b0b0b0; line-height: 1.7; font-weight: 400; }
+    .sub-list { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .sub-item { display: flex; gap: 8px; align-items: flex-start; }
+    .sub-item i { font-size: 13px; color: var(--accent); margin-top: 2px; flex-shrink: 0; }
+    .sub-item span { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+    /* Pills */
+    .pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-family: 'Space Mono', monospace; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; vertical-align: middle; }
+    .pill-holiday { background: var(--amber-bg); color: var(--amber-text); border: 1px solid #3d2d0a; }
+    .pill-final { background: var(--green-bg); color: var(--green-text); border: 1px solid #1a4d30; }
+    .pill-inperson { background: var(--bg-subtle); color: var(--text-secondary); border: 1px solid var(--border); }
+    .pill-today { background: var(--teal-bg); color: var(--teal-text); border: 1px solid #0f2d2a; }
+
+    /* Prose sections */
+    .prose-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.25rem 1.5rem;
+      font-size: 15px; color: #b0b0b0; line-height: 1.75; font-weight: 400;
+    }
+    .prose-card i { color: var(--accent); vertical-align: -2px; margin-right: 4px; }
+
+    /* Resource cards */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+    .link-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1rem 1.25rem;
+      text-decoration: none; display: block;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .link-card:hover { border-color: var(--accent); background: var(--bg-card-hover); }
+    .link-card .card-icon { font-size: 20px; color: var(--accent); margin-bottom: 0.75rem; display: block; }
+    .link-card .card-title { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+    .link-card .card-desc { font-size: 11px; color: var(--text-tertiary); line-height: 1.5; }
+    .link-card .card-arrow { font-size: 11px; color: var(--text-tertiary); margin-top: 0.75rem; display: flex; align-items: center; gap: 4px; font-family: 'Space Mono', monospace; }
+    .link-card:hover .card-arrow { color: var(--green-text); }
+
+    /* Footer */
+    .footer {
+      margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+    .footer-text { font-size: 11px; color: var(--text-tertiary); font-family: 'Space Mono', monospace; display: flex; align-items: center; gap: 6px; }
+    .footer-text i { font-size: 13px; color: var(--text-tertiary); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero">
+    <div class="badge"><i class="ti ti-terminal-2"></i> AI-Enabled Engineering Hackathon</div>
+    <h1>Welcome to the<br><span>AI-Enabled</span> Engineering Hackathon</h1>
+    <p>Everything you need for the week — resources, your group details, and key links — all in one place.</p>
+  </div>
+
+  <div class="nudge">
+    <i class="ti ti-bookmark"></i>
+    Bookmark this page — it will be updated throughout the week as links and materials are added.
+  </div>
+
+  <div class="info-row">
+    <div class="chip"><i class="ti ti-calendar-event"></i> 25–29 May 2026</div>
+    <div class="chip"><i class="ti ti-cpu"></i> Powered by Zenmux</div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-users" style="font-size:13px;color:var(--accent)"></i> Your groups</div>
+    <div class="group-grid">
+      <div class="group-card"><div class="group-num">Group 01</div><div class="group-name">TBD</div><div class="group-domain">Domain TBD</div></div>
+      <div class="group-card"><div class="group-num">Group 02</div><div class="group-name">TBD</div><div class="group-domain">Domain TBD</div></div>
+      <div class="group-card"><div class="group-num">Group 03</div><div class="group-name">TBD</div><div class="group-domain">Domain TBD</div></div>
+      <div class="group-card"><div class="group-num">Group 04</div><div class="group-name">TBD</div><div class="group-domain">Domain TBD</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-calendar" style="font-size:13px;color:var(--accent)"></i> Week at a glance</div>
+    <div class="step-list" id="timeline">
+
+      <div class="step" data-date="2026-05-25">
+        <div class="step-left"><div class="step-dot active"><i class="ti ti-flag" style="font-size:13px;"></i></div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-meta">Mon, 25 May <span class="pill pill-inperson"><i class="ti ti-building" style="font-size:10px;"></i> In-person</span></div>
+          <div class="step-title">Kickoff</div>
+          <div class="step-desc">The Director opens the hackathon, followed by a Q&amp;A on the problem statements. Teams confirm their choice in the room, then start building in the afternoon.</div>
+          <div class="sub-list">
+            <div class="sub-item"><i class="ti ti-microphone"></i><span>Opening by Director — morning</span></div>
+            <div class="sub-item"><i class="ti ti-message-question"></i><span>Q&amp;A on problem statements — teams ask questions and confirm their choice</span></div>
+            <div class="sub-item"><i class="ti ti-rocket"></i><span>Set up Zenmux with your API key and start building — afternoon</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" data-date="2026-05-26">
+        <div class="step-left"><div class="step-dot"><i class="ti ti-code" style="font-size:13px;"></i></div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-meta">Tue, 26 May</div>
+          <div class="step-title">Build day</div>
+          <div class="step-desc">A full day to work on your solution. Experiment with prompting approaches and divide work across the team.</div>
+        </div>
+      </div>
+
+      <div class="step" data-date="2026-05-27">
+        <div class="step-left"><div class="step-dot warning"><i class="ti ti-sun" style="font-size:13px;"></i></div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-meta">Wed, 27 May <span class="pill pill-holiday">Public holiday</span></div>
+          <div class="step-title">Rest day</div>
+          <div class="step-desc">No deliverables today. Use the time to experiment freely, explore prompting approaches, or simply take a break.</div>
+        </div>
+      </div>
+
+      <div class="step" data-date="2026-05-28">
+        <div class="step-left"><div class="step-dot"><i class="ti ti-code" style="font-size:13px;"></i></div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-meta">Thu, 28 May</div>
+          <div class="step-title">Build day &amp; final prep</div>
+          <div class="step-desc">Final day to build and polish. Wrap up your solution and prepare your demo for the sharing session tomorrow.</div>
+        </div>
+      </div>
+
+      <div class="step" data-date="2026-05-29">
+        <div class="step-left"><div class="step-dot success"><i class="ti ti-presentation" style="font-size:13px;"></i></div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-meta">Fri, 29 May — morning <span class="pill pill-final">Final</span></div>
+          <div class="step-title">Virtual sharing session</div>
+          <div class="step-desc">Present your solution to all groups. Each team demos their build and shares a short reflection: what AI helped with, where it fell short, and what you'd do differently.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-file-description" style="font-size:13px;color:var(--accent)"></i> Problem statements</div>
+    <div class="prose-card">
+      <p>Four problem statements will be shared before Day 1. Each team picks one to work on — first to confirm in the room gets it. If there's a clash, teams are encouraged to negotiate. You may also counter-propose your own problem statement for approval.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-credit-card" style="font-size:13px;color:var(--accent)"></i> API credits</div>
+    <div class="prose-card">
+      <p>Each group receives a fixed credit allocation via Zenmux. Treat this as part of the challenge — efficient, well-structured prompts go further. If your group runs low, review your prompting approach before requesting more.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-link" style="font-size:13px;color:var(--accent)"></i> Resources &amp; links</div>
+    <div class="card-grid">
+      <a class="link-card" href="#" target="_blank" rel="noopener">
+        <i class="ti ti-book card-icon"></i>
+        <div class="card-title">Zenmux docs</div>
+        <div class="card-desc">Official documentation and API reference</div>
+        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
+      </a>
+      <a class="link-card" href="#" target="_blank" rel="noopener">
+        <i class="ti ti-bulb card-icon"></i>
+        <div class="card-title">Prompting guide</div>
+        <div class="card-desc">Tips for effective AI prompting</div>
+        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
+      </a>
+      <a class="link-card" href="#" target="_blank" rel="noopener">
+        <i class="ti ti-file-description card-icon"></i>
+        <div class="card-title">Problem statements</div>
+        <div class="card-desc">Your group's challenge brief</div>
+        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
+      </a>
+      <a class="link-card" href="#" target="_blank" rel="noopener">
+        <i class="ti ti-message-circle card-icon"></i>
+        <div class="card-title">Discussion channel</div>
+        <div class="card-desc">Ask questions and share progress</div>
+        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
+      </a>
+      <a class="link-card" href="https://software-engineering.gto.tech.gov.sg/ai-for-swe/" target="_blank" rel="noopener">
+        <i class="ti ti-book-2 card-icon"></i>
+        <div class="card-title">SWE AI handbook</div>
+        <div class="card-desc">Best practices and AI implementation guides</div>
+        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
+      </a>
+      <a class="link-card" href="https://multimodal.aip.gov.sg/handbook/" target="_blank" rel="noopener">
+        <i class="ti ti-brain card-icon"></i>
+        <div class="card-title">Multimodal AI handbook</div>
+        <div class="card-desc">Guide to multimodal AI by AI Practice</div>
+        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
+      </a>
+      <a class="link-card" href="https://build.tech.gov.sg/resources" target="_blank" rel="noopener">
+        <i class="ti ti-layout-grid card-icon"></i>
+        <div class="card-title">Build resources page</div>
+        <div class="card-desc">Full GovTech resource library</div>
+        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="footer-text"><i class="ti ti-clock"></i> Last updated: <span id="last-updated"></span></span>
+    <span class="footer-text"><i class="ti ti-code"></i> AI-Enabled Engineering Hackathon 2026</span>
+  </div>
+
+</div>
+<script>
+  document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-SG', { day: 'numeric', month: 'long', year: 'numeric' });
+  const steps = document.querySelectorAll('.step[data-date]');
+  const today = new Date(); today.setHours(0,0,0,0);
+  steps.forEach(step => {
+    const stepDate = new Date(step.getAttribute('data-date'));
+    const dot = step.querySelector('.step-dot');
+    const body = step.querySelector('.step-body');
+    const meta = step.querySelector('.step-meta');
+    if (stepDate.getTime() === today.getTime()) {
+      if (!dot.classList.contains('warning') && !dot.classList.contains('success')) {
+        dot.classList.remove('active'); dot.classList.add('today');
+      }
+      const p = document.createElement('span'); p.className = 'pill pill-today'; p.textContent = 'Today'; meta.appendChild(p);
+    } else if (stepDate < today) {
+      dot.classList.add('past'); body.classList.add('past');
+    }
+  });
+</script>
+</body>
+</html>
