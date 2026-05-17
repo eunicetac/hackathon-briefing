@@ -179,6 +179,35 @@
     .link-card .card-arrow { font-size: 11px; color: var(--text-tertiary); margin-top: 0.75rem; display: flex; align-items: center; gap: 4px; font-family: 'Space Mono', monospace; }
     .link-card:hover .card-arrow { color: var(--green-text); }
 
+    /* Sublevel labels */
+    .sublevel-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 6px; margin-top: 0.25rem;
+    }
+    .sublevel-desc {
+      font-size: 12px; color: var(--text-secondary);
+      margin-bottom: 0.75rem; line-height: 1.5;
+    }
+
+    /* Tip box */
+    .tip-box {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.25rem; margin-top: 1rem;
+    }
+    .tip-header {
+      font-size: 12px; font-weight: 600; color: var(--accent);
+      font-family: 'Space Mono', monospace; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tip-header i { font-size: 14px; }
+    .tip-body { font-size: 13px; color: #b0b0b0; line-height: 1.65; }
+    .tip-body a { color: var(--accent); text-decoration: none; }
+    .tip-body a:hover { text-decoration: underline; }
+
     /* Footer */
     .footer {
       margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border);
@@ -194,7 +223,7 @@
   <div class="hero">
     <div class="badge"><i class="ti ti-terminal-2"></i> AI-Enabled Engineering Hackathon</div>
     <h1>Welcome to the<br><span>AI-Enabled</span> Engineering Hackathon</h1>
-    <p>Everything you need for the week — resources, your team details, and key links — all in one place.</p>
+    <p>Everything you need for the week — resources, key links — all in one place.</p>
   </div>
 
   <div class="nudge">
@@ -208,16 +237,6 @@
   </div>
 
   <div class="section">
-    <div class="section-label"><i class="ti ti-users" style="font-size:13px;color:var(--accent)"></i> Your teams</div>
-    <div class="team-grid">
-      <div class="team-card"><div class="team-num">Team 01</div><div class="team-name">TBD</div><div class="team-domain">Domain TBD</div></div>
-      <div class="team-card"><div class="team-num">Team 02</div><div class="team-name">TBD</div><div class="team-domain">Domain TBD</div></div>
-      <div class="team-card"><div class="team-num">Team 03</div><div class="team-name">TBD</div><div class="team-domain">Domain TBD</div></div>
-      <div class="team-card"><div class="team-num">Team 04</div><div class="team-name">TBD</div><div class="team-domain">Domain TBD</div></div>
-    </div>
-  </div>
-
-  <div class="section">
     <div class="section-label"><i class="ti ti-calendar" style="font-size:13px;color:var(--accent)"></i> Week at a glance</div>
     <div class="step-list" id="timeline">
 
@@ -228,7 +247,7 @@
           <div class="step-title">Kickoff</div>
           <div class="step-desc">Opening speech by Dir, sharing of the problem statements. Teams to confirm their choice, then start building!</div>
           <div class="sub-list">
-            <div class="sub-item"><i class="ti ti-microphone"></i><span>Opening by Director — morning</span></div>
+            <div class="sub-item"><i class="ti ti-microphone"></i><span>Opening by Director — 9.00am</span></div>
             <div class="sub-item"><i class="ti ti-message-question"></i><span>Q&amp;A on problem statements — teams ask questions and confirm their choice</span></div>
             <div class="sub-item"><i class="ti ti-rocket"></i><span>Set up Zenmux with your API key and start building — afternoon</span></div>
           </div>
@@ -265,8 +284,8 @@
       <div class="step" data-date="2026-05-29">
         <div class="step-left"><div class="step-dot success"><i class="ti ti-presentation" style="font-size:13px;"></i></div><div class="step-line"></div></div>
         <div class="step-body">
-          <div class="step-meta">Fri, 29 May — morning <span class="pill pill-final">Final</span></div>
-          <div class="step-title">Virtual sharing session</div>
+          <div class="step-meta">Fri, 29 May — 9.30am <span class="pill pill-final">Final</span></div>
+          <div class="step-title">Virtual sharing session <span style="font-size:12px;color:#888;font-weight:400;">via Skype</span></div>
           <div class="step-desc">Present your solution to all groups. Each team demos their build and shares a short reflection: what AI helped with, where it fell short, and what you'd do differently.</div>
         </div>
       </div>
@@ -277,7 +296,7 @@
   <div class="section">
     <div class="section-label"><i class="ti ti-file-description" style="font-size:13px;color:var(--accent)"></i> Problem statements</div>
     <div class="prose-card">
-      <p>Four problem statements will be shared before Day 1. Each team picks one to work on — first to confirm in the room gets it. If there's a clash, teams are encouraged to negotiate. You may also counter-propose your own problem statement for approval.</p>
+      <p>Problem statements will be shared before Day 1. Each team picks one to work on — first to confirm in the room gets it. If there's a clash, teams are encouraged to negotiate. You may also counter-propose your own problem statement for approval.</p>
     </div>
   </div>
 
@@ -289,51 +308,94 @@
   </div>
 
   <div class="section">
+  <div class="section">
     <div class="section-label"><i class="ti ti-link" style="font-size:13px;color:var(--accent)"></i> Resources &amp; links</div>
-    <div class="card-grid">
-      <a class="link-card" href="#" target="_blank" rel="noopener">
+
+    <div class="sublevel-label">General</div>
+    <div class="card-grid" style="margin-bottom:1.5rem;">
+      <a class="link-card" href="https://zenmux.ai/best-practices/claude-desktop.html" target="_blank" rel="noopener">
         <i class="ti ti-book card-icon"></i>
         <div class="card-title">Zenmux docs</div>
-        <div class="card-desc">Official documentation and API reference</div>
+        <div class="card-desc">Claude Desktop integration guide</div>
         <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
       </a>
-      <a class="link-card" href="#" target="_blank" rel="noopener">
-        <i class="ti ti-bulb card-icon"></i>
-        <div class="card-title">Prompting guide</div>
-        <div class="card-desc">Tips for effective AI prompting</div>
-        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
-      </a>
-      <a class="link-card" href="#" target="_blank" rel="noopener">
+      <div class="link-card" style="opacity:0.45;pointer-events:none;">
         <i class="ti ti-file-description card-icon"></i>
         <div class="card-title">Problem statements</div>
-        <div class="card-desc">Your group's challenge brief</div>
-        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
-      </a>
-      <a class="link-card" href="#" target="_blank" rel="noopener">
-        <i class="ti ti-message-circle card-icon"></i>
+        <div class="card-desc">Coming soon</div>
+        <div class="card-arrow"><i class="ti ti-clock" style="font-size:11px;"></i> Coming soon</div>
+      </div>
+      <div class="link-card" style="pointer-events:none;">
+        <i class="ti ti-brand-telegram card-icon"></i>
         <div class="card-title">Discussion channel</div>
-        <div class="card-desc">Ask questions and share progress</div>
+        <div class="card-desc">Telegram group — link shared via email</div>
+        <div class="card-arrow"><i class="ti ti-mail" style="font-size:11px;"></i> Check your email</div>
+      </div>
+    </div>
+
+    <div class="sublevel-label">Get started — Prompting fundamentals</div>
+    <div class="sublevel-desc">New to AI prompting? Start here before you build.</div>
+    <div class="card-grid" style="margin-bottom:1.5rem;">
+      <a class="link-card" href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices" target="_blank" rel="noopener">
+        <i class="ti ti-bulb card-icon"></i>
+        <div class="card-title">Prompting guide</div>
+        <div class="card-desc">Anthropic's best practices for Claude 4 models</div>
         <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
       </a>
-      <a class="link-card" href="https://software-engineering.gto.tech.gov.sg/ai-for-swe/" target="_blank" rel="noopener">
-        <i class="ti ti-book-2 card-icon"></i>
-        <div class="card-title">SWE AI handbook</div>
-        <div class="card-desc">Best practices and AI implementation guides</div>
+      <a class="link-card" href="https://github.com/anthropics/prompt-eng-interactive-tutorial" target="_blank" rel="noopener">
+        <i class="ti ti-terminal card-icon"></i>
+        <div class="card-title">Prompting tutorial</div>
+        <div class="card-desc">Hands-on interactive exercises — great for experiential learners</div>
         <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
       </a>
-      <a class="link-card" href="https://multimodal.aip.gov.sg/handbook/" target="_blank" rel="noopener">
-        <i class="ti ti-brain card-icon"></i>
-        <div class="card-title">Multimodal AI handbook</div>
-        <div class="card-desc">Guide to multimodal AI by AI Practice</div>
-        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
-      </a>
-      <a class="link-card" href="https://build.tech.gov.sg/resources" target="_blank" rel="noopener">
-        <i class="ti ti-layout-grid card-icon"></i>
-        <div class="card-title">Build resources page</div>
-        <div class="card-desc">Full GovTech resource library</div>
+      <a class="link-card" href="https://codewave.com/insights/ai-prompt-engineering-cheat-sheet/" target="_blank" rel="noopener">
+        <i class="ti ti-checklist card-icon"></i>
+        <div class="card-title">Prompting cheat sheet</div>
+        <div class="card-desc">Examples-rich reference for software teams</div>
         <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
       </a>
     </div>
+
+    <div class="sublevel-label">Go deeper — Context engineering &amp; agentic AI</div>
+    <div class="sublevel-desc">Once comfortable with prompting, level up with how modern AI agents work.</div>
+    <div class="card-grid" style="margin-bottom:0.5rem;">
+      <a class="link-card" href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">
+        <i class="ti ti-window card-icon"></i>
+        <div class="card-title">Context windows</div>
+        <div class="card-desc">How Claude manages context and what it means for your prompts</div>
+        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
+      </a>
+      <a class="link-card" href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener">
+        <i class="ti ti-brain card-icon"></i>
+        <div class="card-title">Context engineering</div>
+        <div class="card-desc">Anthropic's guide to context engineering for AI agents</div>
+        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
+      </a>
+      <a class="link-card" href="https://agents.md/" target="_blank" rel="noopener">
+        <i class="ti ti-robot card-icon"></i>
+        <div class="card-title">AGENTS.md</div>
+        <div class="card-desc">A README for AI agents — help them understand your project</div>
+        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
+      </a>
+      <a class="link-card" href="https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/" target="_blank" rel="noopener">
+        <i class="ti ti-pencil card-icon"></i>
+        <div class="card-title">Writing AGENTS.md</div>
+        <div class="card-desc">Lessons from 2,500+ repositories on writing effective agent instructions</div>
+        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
+      </a>
+      <a class="link-card" href="https://artificialanalysis.ai/evaluations/omniscience" target="_blank" rel="noopener">
+        <i class="ti ti-chart-bar card-icon"></i>
+        <div class="card-title">Model benchmark</div>
+        <div class="card-desc">Not all models excel at coding — use this to pick the right one for your task</div>
+        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
+      </a>
+    </div>
+
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-header"><i class="ti ti-bulb"></i> Tip — Sharing your project as a live link</div>
+    <div class="tip-body">Want to share your project as a live link during the sharing session? Try <a href="https://netlify.com" target="_blank" rel="noopener">Netlify</a> — drag and drop your project folder and get a shareable URL in under a minute. No CLI or sign-up required.</div>
   </div>
 
   <div class="footer">
