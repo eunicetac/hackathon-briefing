@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PS2 — Eliminate Engineering Toil in C3 Workflows</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #111111; --bg-card: #1e1e1e; --bg-card-hover: #252525; --bg-subtle: #1a1a1a;
+      --border: #2e2e2e; --border-bright: #3a3a3a;
+      --text-primary: #f0f0f0; --text-secondary: #b0b0b0; --text-tertiary: #888888;
+      --accent: #3ecf8e; --accent-bg: #0d2e1e; --accent-text: #6ee7b7;
+      --green: #3ecf8e; --green-bg: #0d2e1e; --green-text: #6ee7b7;
+      --amber: #f59e0b; --amber-bg: #2a1f08; --amber-text: #fcd34d;
+      --red: #ef4444; --red-bg: #2a0f0f; --red-text: #fca5a5;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; padding: 3rem 1.5rem 4rem; }
+    .container { max-width: 740px; margin: 0 auto; }
+    .back-nav { display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-tertiary); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
+    .back-nav:hover { color: var(--accent); }
+    .back-nav i { font-size: 13px; }
+    .hero { margin-bottom: 2.5rem; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent-bg); color: var(--accent-text); border: 1px solid #1a4d30; padding: 5px 12px; border-radius: 6px; margin-bottom: 1.25rem; }
+    .hero h1 { font-family: 'Space Mono', monospace; font-size: 26px; font-weight: 700; color: #f0f0f0; line-height: 1.35; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+    .hero h1 span { color: var(--accent); }
+    .hero p { font-size: 15px; color: var(--text-secondary); line-height: 1.75; font-weight: 300; }
+    .section { margin-bottom: 2.5rem; }
+    .section-label { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .prose-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; font-size: 15px; color: #b0b0b0; line-height: 1.75; font-weight: 400; }
+    .prose-card p { margin-bottom: 0.9rem; }
+    .prose-card p:last-child { margin-bottom: 0; }
+    .prose-card strong { color: var(--text-primary); font-weight: 500; }
+    .mission-box { background: var(--bg-subtle); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0; padding: 1.25rem 1.5rem; font-size: 15px; color: #b0b0b0; line-height: 1.75; margin-bottom: 1rem; }
+    .mission-box p { margin-bottom: 0.9rem; }
+    .mission-box p:last-child { margin-bottom: 0; }
+    .mission-box strong { color: var(--text-primary); font-weight: 500; }
+    .tier { margin-bottom: 1.25rem; }
+    .tier-header { display: flex; align-items: center; gap: 8px; margin-bottom: 0.6rem; }
+    .tier-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .tier-dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .tier-dot.amber { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+    .tier-dot.red { background: var(--red); box-shadow: 0 0 6px var(--red); }
+    .tier-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; }
+    .tier-label.green { color: var(--green-text); }
+    .tier-label.amber { color: var(--amber-text); }
+    .tier-label.red { color: var(--red-text); }
+    .tier-items { display: flex; flex-direction: column; gap: 6px; padding-left: 16px; }
+    .tier-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; font-size: 14px; color: var(--text-secondary); line-height: 1.65; transition: border-color 0.2s, background 0.2s; }
+    .tier-item:hover { border-color: var(--border-bright); background: var(--bg-card-hover); }
+    .bottom-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 12px; }
+    .nav-link { display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-tertiary); text-decoration: none; transition: color 0.2s; }
+    .nav-link:hover { color: var(--accent); }
+    .nav-link i { font-size: 13px; }
+    .nav-link.home { color: var(--accent); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-nav" href="index.html"><i class="ti ti-arrow-left"></i> All problem statements</a>
+
+  <div class="hero">
+    <div class="badge"><i class="ti ti-tool"></i> Problem Statement 02</div>
+    <h1>Eliminate <span>Engineering Toil</span> in C3 Workflows</h1>
+    <p>Make best practices the path of least resistance — structurally embed good engineering into the tools C3 teams already reach for.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-info-circle" style="font-size:13px;color:var(--accent)"></i> Background</div>
+    <div class="prose-card">
+      <p>C3 development teams routinely absorb hours in repetitive, low-value tasks — redundant environment setups, boilerplate configurations, inconsistent code scaffolding, and copy-paste debugging steps — that quietly drain productive capacity without ever appearing on a risk register. Best practices exist and are well understood, yet they are inconsistently followed because the path of least resistance rarely aligns with the path of best practice. Following standards requires conscious effort; cutting corners is simply faster in the moment.</p>
+      <p>The real opportunity is not to remind engineers what good looks like, but to <strong>structurally embed it into the tools they already reach for</strong> — so that best practices happen as a natural consequence of the workflow, not as an act of discipline.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-target" style="font-size:13px;color:var(--accent)"></i> Your mission</div>
+    <div class="mission-box">
+      <p>Identify a specific source of engineering toil within C3 development workflows and design a prototype that makes the correct approach the easiest approach. Your solution should reduce or eliminate the identified toil through automation, intelligent scaffolding, or workflow integration — and demonstrate that best practice adherence becomes the default, not the exception.</p>
+      <p>You do not need to boil the ocean. <strong>Pick one well-defined pain point and solve it meaningfully</strong> rather than sketching a broad platform that addresses everything shallowly.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-stairs" style="font-size:13px;color:var(--accent)"></i> Suggested starting points <span style="font-family:'DM Sans';font-weight:300;font-size:11px;letter-spacing:0;text-transform:none;color:var(--text-tertiary);margin-left:4px;">— you are not limited to these</span></div>
+
+    <div class="tier">
+      <div class="tier-header"><div class="tier-dot green"></div><span class="tier-label green">Accessible</span></div>
+      <div class="tier-items">
+        <div class="tier-item">Use an AI coding assistant to generate and validate boilerplate configurations for a specific C3 module (e.g. an incident management service), and reflect on how it reduced setup time and improved consistency.</div>
+        <div class="tier-item">Build an AI-assisted onboarding guide that answers common C3 development questions conversationally, reducing reliance on tribal knowledge and undocumented institutional practices.</div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-header"><div class="tier-dot amber"></div><span class="tier-label amber">Intermediate</span></div>
+      <div class="tier-items">
+        <div class="tier-item">Build an AI-powered tool that scans a C3 codebase for deviations from GC3 architectural standards — such as inconsistent module boundaries or missing governance hooks — and surfaces prioritised recommendations.</div>
+        <div class="tier-item">Design an intelligent scaffolding tool that generates new C3-compliant service templates from a natural language description, ensuring architectural consistency across the product family from the start.</div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-header"><div class="tier-dot red"></div><span class="tier-label red">Advanced</span></div>
+      <div class="tier-items">
+        <div class="tier-item">Implement an agentic code review assistant trained on C3 engineering standards that intercepts pull requests, identifies toil patterns and standard deviations, and proposes concrete remediations before human review.</div>
+        <div class="tier-item">Build an MCP-connected developer agent that monitors C3 pipeline activity in real-time, proactively surfaces emerging toil patterns across the team, and auto-generates fixes or templates for repeated issues.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <a class="nav-link" href="ps1.html"><i class="ti ti-arrow-left"></i> PS1 — GC3 Platform</a>
+    <a class="nav-link home" href="index.html"><i class="ti ti-home"></i> Home</a>
+    <a class="nav-link" href="ps3.html">PS3 — Integration Gateway <i class="ti ti-arrow-right"></i></a>
+  </div>
+
+</div>
+</body>
+</html>

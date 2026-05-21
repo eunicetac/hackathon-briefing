@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PS3 — AI-Generated C3 Integration Gateway</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #111111; --bg-card: #1e1e1e; --bg-card-hover: #252525; --bg-subtle: #1a1a1a;
+      --border: #2e2e2e; --border-bright: #3a3a3a;
+      --text-primary: #f0f0f0; --text-secondary: #b0b0b0; --text-tertiary: #888888;
+      --accent: #3ecf8e; --accent-bg: #0d2e1e; --accent-text: #6ee7b7;
+      --green: #3ecf8e; --green-bg: #0d2e1e; --green-text: #6ee7b7;
+      --amber: #f59e0b; --amber-bg: #2a1f08; --amber-text: #fcd34d;
+      --red: #ef4444; --red-bg: #2a0f0f; --red-text: #fca5a5;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; padding: 3rem 1.5rem 4rem; }
+    .container { max-width: 740px; margin: 0 auto; }
+    .back-nav { display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-tertiary); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
+    .back-nav:hover { color: var(--accent); }
+    .back-nav i { font-size: 13px; }
+    .hero { margin-bottom: 2.5rem; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent-bg); color: var(--accent-text); border: 1px solid #1a4d30; padding: 5px 12px; border-radius: 6px; margin-bottom: 1.25rem; }
+    .hero h1 { font-family: 'Space Mono', monospace; font-size: 26px; font-weight: 700; color: #f0f0f0; line-height: 1.35; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+    .hero h1 span { color: var(--accent); }
+    .hero p { font-size: 15px; color: var(--text-secondary); line-height: 1.75; font-weight: 300; }
+    .section { margin-bottom: 2.5rem; }
+    .section-label { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .prose-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; font-size: 15px; color: #b0b0b0; line-height: 1.75; font-weight: 400; }
+    .prose-card p { margin-bottom: 0.9rem; }
+    .prose-card p:last-child { margin-bottom: 0; }
+    .prose-card strong { color: var(--text-primary); font-weight: 500; }
+    .mission-box { background: var(--bg-subtle); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0; padding: 1.25rem 1.5rem; font-size: 15px; color: #b0b0b0; line-height: 1.75; margin-bottom: 1rem; }
+    .mission-box p { margin-bottom: 0.9rem; }
+    .mission-box p:last-child { margin-bottom: 0; }
+    .mission-box strong { color: var(--text-primary); font-weight: 500; }
+    /* Starter pack */
+    .starter-pack { background: var(--green-bg); border: 1px solid #1a4d30; border-radius: 12px; padding: 1.25rem 1.5rem; }
+    .starter-title { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green-text); margin-bottom: 0.9rem; display: flex; align-items: center; gap: 6px; }
+    .starter-title i { font-size: 13px; }
+    .starter-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; font-size: 14px; color: #b0b0b0; line-height: 1.6; }
+    .starter-item:last-child { margin-bottom: 0; }
+    .starter-item i { font-size: 13px; color: var(--accent); margin-top: 2px; flex-shrink: 0; }
+    .tip-box { background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin-top: 1rem; }
+    .tip-header { font-size: 12px; font-weight: 600; color: var(--accent); font-family: 'Space Mono', monospace; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .tip-header i { font-size: 14px; }
+    .tip-body { font-size: 13px; color: #b0b0b0; line-height: 1.65; }
+    .tier { margin-bottom: 1.25rem; }
+    .tier-header { display: flex; align-items: center; gap: 8px; margin-bottom: 0.6rem; }
+    .tier-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .tier-dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .tier-dot.amber { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+    .tier-dot.red { background: var(--red); box-shadow: 0 0 6px var(--red); }
+    .tier-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; }
+    .tier-label.green { color: var(--green-text); }
+    .tier-label.amber { color: var(--amber-text); }
+    .tier-label.red { color: var(--red-text); }
+    .tier-items { display: flex; flex-direction: column; gap: 6px; padding-left: 16px; }
+    .tier-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; font-size: 14px; color: var(--text-secondary); line-height: 1.65; transition: border-color 0.2s, background 0.2s; }
+    .tier-item:hover { border-color: var(--border-bright); background: var(--bg-card-hover); }
+    .bottom-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 12px; }
+    .nav-link { display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-tertiary); text-decoration: none; transition: color 0.2s; }
+    .nav-link:hover { color: var(--accent); }
+    .nav-link i { font-size: 13px; }
+    .nav-link.home { color: var(--accent); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-nav" href="index.html"><i class="ti ti-arrow-left"></i> All problem statements</a>
+
+  <div class="hero">
+    <div class="badge"><i class="ti ti-code"></i> Problem Statement 03</div>
+    <h1>From Requirements to Code —<br><span>AI-Generated C3 Integration Gateway</span></h1>
+    <p>Build an agentic AI prototype that interprets C3 integration requirements and automatically generates standards-compliant gateway code.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-info-circle" style="font-size:13px;color:var(--accent)"></i> Background</div>
+    <div class="prose-card">
+      <p>Translating C3 integration requirements into integration gateway code is a structured, rule-bound process that nonetheless remains heavily manual. Engineers must repeatedly parse requirements, apply domain-specific patterns, and hand-craft code that meets gateway standards — work that is time-consuming, error-prone, and inconsistent across individuals and teams.</p>
+      <p>With agentic AI now sufficiently mature, there is a clear opportunity to build an AI agent that understands the semantics of C3 integration requirements and autonomously generates accurate, standards-compliant gateway code — compressing the time from requirement to deployment and freeing engineers to focus on higher-order problems.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-target" style="font-size:13px;color:var(--accent)"></i> Your mission</div>
+    <div class="mission-box">
+      <p>Using the provided starter pack of sample C3 integration requirements and reference gateway code, build an agentic AI prototype that interprets integration requirements and automatically generates standards-compliant gateway code as output.</p>
+      <p>Begin by studying the provided examples to understand the patterns, rules, and logic that engineers currently apply manually. Then design an agentic workflow that replicates and automates this translation — demonstrating a working end-to-end flow from requirement ingestion to code generation, wrapped in an interface that a user can actually interact with.</p>
+      <p>The best submissions will go beyond mechanical code generation to show <strong>intelligent handling of ambiguity</strong> — where requirements are incomplete, conflicting, or underspecified, how does your agent reason, flag, or resolve the gap?</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-package" style="font-size:13px;color:var(--accent)"></i> Starter pack — provided to all teams</div>
+    <div class="starter-pack">
+      <div class="starter-title"><i class="ti ti-box"></i> What you will receive</div>
+      <div class="starter-item"><i class="ti ti-circle-check"></i>10 representative C3 integration requirements of varying complexity</div>
+      <div class="starter-item"><i class="ti ti-circle-check"></i>3 example hand-crafted gateway code outputs corresponding to selected requirements, illustrating the translation patterns engineers currently apply</div>
+      <div class="starter-item"><i class="ti ti-circle-check"></i>A reference sheet of gateway standards and constraints your generated code must adhere to</div>
+    </div>
+    <div class="tip-box">
+      <div class="tip-header"><i class="ti ti-bulb"></i> Tip</div>
+      <div class="tip-body">The starter pack is a baseline, not a ceiling. Teams are encouraged to extend beyond the provided examples once the core flow is working.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-stairs" style="font-size:13px;color:var(--accent)"></i> Suggested starting points <span style="font-family:'DM Sans';font-weight:300;font-size:11px;letter-spacing:0;text-transform:none;color:var(--text-tertiary);margin-left:4px;">— you are not limited to these</span></div>
+
+    <div class="tier">
+      <div class="tier-header"><div class="tier-dot green"></div><span class="tier-label green">Accessible</span></div>
+      <div class="tier-items">
+        <div class="tier-item">Use an AI coding assistant to study the provided examples and manually identify the translation patterns, then document these as a structured rule set that could form the basis of an automated pipeline.</div>
+        <div class="tier-item">Build a simple prompt-based prototype where an LLM accepts a requirement as input and generates a first-cut gateway code output, validated manually against the reference standards.</div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-header"><div class="tier-dot amber"></div><span class="tier-label amber">Intermediate</span></div>
+      <div class="tier-items">
+        <div class="tier-item">Design an agentic workflow that ingests a requirement, applies the identified translation patterns, generates gateway code, and runs a validation step to check adherence to gateway standards before presenting output to the user.</div>
+        <div class="tier-item">Build a conversational interface where an engineer can submit a requirement, review the generated code, provide feedback, and have the agent iteratively refine the output.</div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-header"><div class="tier-dot red"></div><span class="tier-label red">Advanced</span></div>
+      <div class="tier-items">
+        <div class="tier-item">Implement a multi-step agent that not only generates gateway code but actively reasons through ambiguous or underspecified requirements — asking clarifying questions, surfacing assumptions, and flagging risks before committing to an output.</div>
+        <div class="tier-item">Build an evaluation harness that automatically scores generated gateway code against the reference outputs, enabling rapid iteration and benchmarking of different agentic approaches.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <a class="nav-link" href="ps2.html"><i class="ti ti-arrow-left"></i> PS2 — Engineering Toil</a>
+    <a class="nav-link home" href="index.html"><i class="ti ti-home"></i> Home</a>
+    <span style="width:120px;"></span>
+  </div>
+
+</div>
+</body>
+</html>
