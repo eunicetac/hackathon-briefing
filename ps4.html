@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PS4 — Agentic AI C3 Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #111111; --bg-card: #1e1e1e; --bg-card-hover: #252525; --bg-subtle: #1a1a1a;
+      --border: #2e2e2e; --border-bright: #3a3a3a;
+      --text-primary: #f0f0f0; --text-secondary: #b0b0b0; --text-tertiary: #888888;
+      --accent: #3ecf8e; --accent-bg: #0d2e1e; --accent-text: #6ee7b7;
+      --green: #3ecf8e; --green-bg: #0d2e1e; --green-text: #6ee7b7;
+      --amber: #f59e0b; --amber-bg: #2a1f08; --amber-text: #fcd34d;
+      --red: #ef4444; --red-bg: #2a0f0f; --red-text: #fca5a5;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; padding: 3rem 1.5rem 4rem; }
+    .container { max-width: 740px; margin: 0 auto; }
+    .hero { margin-bottom: 2.5rem; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent-bg); color: var(--accent-text); border: 1px solid #1a4d30; padding: 5px 12px; border-radius: 6px; margin-bottom: 1.25rem; }
+    .hero h1 { font-family: 'Space Mono', monospace; font-size: 26px; font-weight: 700; color: #f0f0f0; line-height: 1.35; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+    .hero h1 span { color: var(--accent); }
+    .hero p { font-size: 15px; color: var(--text-secondary); line-height: 1.75; font-weight: 300; }
+    .section { margin-bottom: 2.5rem; }
+    .section-label { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .prose-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; font-size: 15px; color: #b0b0b0; line-height: 1.75; font-weight: 400; }
+    .prose-card p { margin-bottom: 0.9rem; }
+    .prose-card p:last-child { margin-bottom: 0; }
+    .prose-card strong { color: var(--text-primary); font-weight: 500; }
+    .mission-box { background: var(--bg-subtle); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 12px 12px 0; padding: 1.25rem 1.5rem; font-size: 15px; color: #b0b0b0; line-height: 1.75; margin-bottom: 1rem; }
+    .mission-box p { margin-bottom: 0.9rem; }
+    .mission-box p:last-child { margin-bottom: 0; }
+    .mission-box strong { color: var(--text-primary); font-weight: 500; }
+    .tier { margin-bottom: 1.25rem; }
+    .tier-header { display: flex; align-items: center; gap: 8px; margin-bottom: 0.6rem; }
+    .tier-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .tier-dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .tier-dot.amber { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+    .tier-dot.red { background: var(--red); box-shadow: 0 0 6px var(--red); }
+    .tier-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; }
+    .tier-label.green { color: var(--green-text); }
+    .tier-label.amber { color: var(--amber-text); }
+    .tier-label.red { color: var(--red-text); }
+    .tier-items { display: flex; flex-direction: column; gap: 6px; padding-left: 16px; }
+    .tier-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; font-size: 14px; color: var(--text-secondary); line-height: 1.65; transition: border-color 0.2s, background 0.2s; }
+    .tier-item:hover { border-color: var(--border-bright); background: var(--bg-card-hover); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero">
+    <div class="badge"><i class="ti ti-robot"></i> Problem Statement 04</div>
+    <h1>Agentic AI <span>C3 Assistant</span></h1>
+    <p>Design an intelligent assistant that actively supports commanders and staff in planning, coordination, and execution — going far beyond a chatbot that answers questions.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-info-circle" style="font-size:13px;color:var(--accent)"></i> Background</div>
+    <div class="prose-card">
+      <p>C3 operations today are supported by a wide array of tools, dashboards, and data sources, yet the burden of synthesizing information, making decisions, and executing actions still falls disproportionately on human operators. As operational tempo increases and the complexity of C3 environments grows, there is a pressing need for intelligent assistance that goes beyond passive information display to actively support commanders and staff in planning, coordination, and execution.</p>
+      <p>Agentic AI represents a transformational shift in this space — moving from AI that merely responds to queries, to AI that autonomously reasons across multiple data sources, anticipates information needs, initiates workflows, and acts on behalf of operators within defined boundaries. A C3 Assistant built on agentic AI principles has the potential to fundamentally change how commands are staffed, how situational awareness is maintained, and how decisions are accelerated — compressing the time between observation and action while reducing cognitive load on operators.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-target" style="font-size:13px;color:var(--accent)"></i> Your mission</div>
+    <div class="mission-box">
+      <p>Imagine and prototype what an Agentic AI C3 Assistant could meaningfully do for a commander or staff officer in an operational context. You have full latitude to define the operational scenario, the assistant's capabilities, and the interaction model — but your prototype must demonstrate <strong>genuine agentic behaviour</strong>, not just a chatbot that answers questions.</p>
+      <p>A strong submission will show an assistant that reasons, acts, and operates within defined boundaries — one that a real operator could imagine trusting in a high-tempo environment. Start with a focused brainstorm to identify the capabilities that would deliver the greatest operational impact, then narrow to what is feasible to prototype in the time available.</p>
+      <p><strong>Pick one compelling capability and demonstrate it convincingly</strong> rather than sketching ten capabilities superficially.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-stairs" style="font-size:13px;color:var(--accent)"></i> Suggested starting points <span style="font-family:'DM Sans';font-weight:300;font-size:11px;letter-spacing:0;text-transform:none;color:var(--text-tertiary);margin-left:4px;">— you are not limited to these</span></div>
+
+    <div class="tier">
+      <div class="tier-header"><div class="tier-dot green"></div><span class="tier-label green">Accessible</span></div>
+      <div class="tier-items">
+        <div class="tier-item">Build a conversational C3 Assistant that synthesizes information from multiple simulated data sources — such as incident logs, task lists, and unit statuses — and presents a coherent operational picture in response to natural language queries.</div>
+        <div class="tier-item">Use an AI coding assistant to rapidly prototype a simple operator dashboard with an embedded AI assistant, and reflect on how AI tooling changed your frontend development workflow.</div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-header"><div class="tier-dot amber"></div><span class="tier-label amber">Intermediate</span></div>
+      <div class="tier-items">
+        <div class="tier-item">Design a C3 Assistant that proactively monitors a simulated operational feed and surfaces decision-relevant information to a commander without being asked — anticipating information needs based on the current operational context.</div>
+        <div class="tier-item">Build an assistant that autonomously drafts operational orders or situation reports from a set of structured inputs, allows operators to review and edit, and refines outputs based on feedback.</div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-header"><div class="tier-dot red"></div><span class="tier-label red">Advanced</span></div>
+      <div class="tier-items">
+        <div class="tier-item">Implement a multi-agent C3 Assistant where specialised sub-agents handle distinct staff functions — such as intelligence, logistics, and operations — and a coordinating agent synthesises their outputs into coherent recommendations for the commander.</div>
+        <div class="tier-item">Build an agentic assistant that not only reasons across data sources but autonomously initiates and tracks follow-up actions — such as tasking, escalation, or information requests — within clearly defined human-in-the-loop governance boundaries.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
