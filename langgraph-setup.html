@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LangChain + LangGraph + LangSmith — Dev Setup Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #111111;
+      --bg-card: #1e1e1e;
+      --bg-card-hover: #252525;
+      --bg-subtle: #1a1a1a;
+      --border: #2e2e2e;
+      --border-bright: #3a3a3a;
+      --text-primary: #f0f0f0;
+      --text-secondary: #b0b0b0;
+      --text-tertiary: #888888;
+      --accent: #3ecf8e;
+      --accent-bg: #0d2e1e;
+      --accent-text: #6ee7b7;
+      --green: #3ecf8e;
+      --green-bg: #0d2e1e;
+      --green-text: #6ee7b7;
+      --amber: #f59e0b;
+      --amber-bg: #2a1f08;
+      --amber-text: #fcd34d;
+      --red: #ef4444;
+      --red-bg: #2a0f0f;
+      --red-text: #fca5a5;
+      --blue: #5c6fff;
+      --blue-bg: #0d1220;
+      --blue-text: #a5b4fc;
+    }
+
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; padding: 3rem 1.5rem 4rem; }
+    .container { max-width: 740px; margin: 0 auto; }
+
+    /* Hero */
+    .hero { margin-bottom: 2.5rem; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent-bg); color: var(--accent-text); border: 1px solid #1a4d30; padding: 5px 12px; border-radius: 6px; margin-bottom: 1.25rem; }
+    .hero h1 { font-family: 'Space Mono', monospace; font-size: 26px; font-weight: 700; color: #f0f0f0; line-height: 1.35; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+    .hero h1 span { color: var(--accent); }
+    .hero p { font-size: 15px; color: var(--text-secondary); line-height: 1.75; font-weight: 300; }
+
+    /* Nudge */
+    .nudge { display: flex; align-items: flex-start; gap: 10px; background: var(--bg-subtle); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13px; color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.6; }
+    .nudge i { color: var(--accent); font-size: 16px; margin-top: 1px; flex-shrink: 0; }
+
+    /* Section */
+    .section { margin-bottom: 2.5rem; }
+    .section-label { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* Sublevel */
+    .sublevel-label { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; margin-top: 1rem; }
+
+    /* Prose card */
+    .prose-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; font-size: 14px; color: var(--text-secondary); line-height: 1.75; }
+    .prose-card p { margin-bottom: 0.75rem; }
+    .prose-card p:last-child { margin-bottom: 0; }
+    .prose-card strong { color: var(--text-primary); font-weight: 500; }
+
+    /* Step list */
+    .step-list { display: flex; flex-direction: column; }
+    .step { display: flex; gap: 14px; align-items: flex-start; padding-bottom: 2rem; }
+    .step:last-child { padding-bottom: 0; }
+    .step-left { display: flex; flex-direction: column; align-items: center; min-width: 28px; }
+    .step-dot { width: 28px; height: 28px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-family: 'Space Mono', monospace; color: var(--text-tertiary); flex-shrink: 0; }
+    .step-dot.active { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+    .step-line { width: 1px; flex: 1; background: var(--border); margin-top: 4px; min-height: 20px; }
+    .step:last-child .step-line { display: none; }
+    .step-body { padding-top: 3px; flex: 1; }
+    .step-meta { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 4px; }
+    .step-title { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+    .step-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+    /* Resource card */
+    .resource-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 8px; transition: border-color 0.2s, background 0.2s; }
+    .resource-card:hover { border-color: var(--border-bright); background: var(--bg-card-hover); }
+    .resource-card:last-child { margin-bottom: 0; }
+    .resource-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+    .resource-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); margin-bottom: 4px; }
+    .resource-label.optional { color: var(--text-tertiary); }
+    .resource-title { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+    .resource-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-top: 6px; }
+    .resource-link { display: inline-flex; align-items: center; gap: 4px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); text-decoration: none; border: 1px solid #1a4d30; padding: 4px 10px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; transition: background 0.2s, color 0.2s; }
+    .resource-link:hover { background: var(--accent); color: var(--bg); }
+
+    /* Checklist */
+    .checklist { list-style: none; margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+    .checklist li { font-size: 13px; color: var(--text-secondary); display: flex; gap: 8px; align-items: flex-start; line-height: 1.6; }
+    .checklist li i { font-size: 13px; color: var(--accent); margin-top: 2px; flex-shrink: 0; }
+
+    /* Focus tags */
+    .focus-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .focus-tag { font-family: 'Space Mono', monospace; font-size: 10px; background: var(--bg-subtle); border: 1px solid var(--border); padding: 3px 10px; border-radius: 4px; color: var(--text-secondary); }
+
+    /* Code block */
+    .code-wrap { position: relative; margin-top: 8px; }
+    .code-block { background: var(--bg-subtle); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; padding-top: 2.5rem; font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text-secondary); overflow-x: auto; white-space: pre; line-height: 1.7; }
+    .code-block .k { color: #a5b4fc; }
+    .code-block .s { color: var(--accent); }
+    .code-block .c { color: #444466; }
+    .copy-btn { position: absolute; top: 8px; right: 8px; background: var(--bg-card); border: 1px solid var(--border); color: var(--accent); font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.08em; padding: 3px 10px; border-radius: 4px; cursor: pointer; transition: background 0.2s, color 0.2s; z-index: 2; }
+    .copy-btn:hover { background: var(--accent); color: var(--bg); }
+
+    /* Info / tip / warning boxes */
+    .tip-box { background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin-top: 8px; }
+    .tip-header { font-size: 12px; font-weight: 600; color: var(--accent); font-family: 'Space Mono', monospace; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .tip-header i { font-size: 14px; }
+    .tip-body { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+    .tip-body strong { color: var(--text-primary); font-weight: 500; }
+    .tip-body a { color: var(--accent); text-decoration: none; }
+    .tip-body a:hover { text-decoration: underline; }
+
+    .warn-box { background: var(--red-bg); border: 1px solid rgba(239,68,68,0.25); border-left: 3px solid var(--red); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin-top: 8px; }
+    .warn-header { font-size: 12px; font-weight: 600; color: var(--red-text); font-family: 'Space Mono', monospace; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .warn-header i { font-size: 14px; }
+    .warn-body { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+    .warn-body strong { color: var(--text-primary); font-weight: 500; }
+    .warn-body code { font-family: 'Space Mono', monospace; font-size: 11px; background: var(--bg-subtle); padding: 1px 5px; border-radius: 3px; }
+
+    .info-box { background: var(--blue-bg); border: 1px solid rgba(92,111,255,0.25); border-left: 3px solid var(--blue); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin-top: 8px; }
+    .info-header { font-size: 12px; font-weight: 600; color: var(--blue-text); font-family: 'Space Mono', monospace; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .info-header i { font-size: 14px; }
+    .info-body { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+    .info-body strong { color: var(--text-primary); font-weight: 500; }
+    .info-body code { font-family: 'Space Mono', monospace; font-size: 11px; background: var(--bg-subtle); padding: 1px 5px; border-radius: 3px; }
+
+    /* Outcome */
+    .outcome { background: var(--accent-bg); border: 1px solid #1a4d30; border-radius: 8px; padding: 12px 16px; margin-top: 8px; font-size: 13px; color: var(--accent-text); line-height: 1.6; display: flex; gap: 8px; align-items: flex-start; }
+    .outcome i { font-size: 14px; color: var(--accent); margin-top: 1px; flex-shrink: 0; }
+
+    /* Going further banner */
+    .further-banner { background: var(--blue-bg); border: 1px solid rgba(92,111,255,0.2); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+    .further-banner-title { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue-text); margin-bottom: 8px; }
+    .further-banner p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+    .further-banner strong { color: var(--text-primary); font-weight: 500; }
+
+    /* Timeline summary */
+    .timeline-table { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .timeline-row { display: grid; grid-template-columns: 110px 70px 1fr; border-bottom: 1px solid var(--border); }
+    .timeline-row:last-child { border-bottom: none; }
+    .tl-phase, .tl-time, .tl-task { padding: 10px 14px; font-size: 12px; }
+    .tl-phase { color: var(--accent); font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; border-right: 1px solid var(--border); }
+    .tl-time { color: var(--text-tertiary); font-family: 'Space Mono', monospace; font-size: 11px; border-right: 1px solid var(--border); }
+    .tl-task { color: var(--text-secondary); line-height: 1.5; }
+
+    /* Footer */
+    .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .footer-text { font-size: 11px; color: var(--text-tertiary); font-family: 'Space Mono', monospace; display: flex; align-items: center; gap: 6px; }
+    .footer-text i { font-size: 13px; }
+
+    code { font-family: 'Space Mono', monospace; font-size: 11px; background: var(--bg-subtle); padding: 1px 5px; border-radius: 3px; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="badge"><i class="ti ti-brand-python"></i> Developer Setup Guide</div>
+    <h1>LangChain <span>+</span> LangGraph <span>+</span> LangSmith</h1>
+    <p>LangChain is the base library. LangGraph builds on top of it to orchestrate agents. LangSmith traces and debugs them. This guide gets all three set up.</p>
+  </div>
+
+  <div class="nudge">
+    <i class="ti ti-info-circle"></i>
+    API credits are provided via Zenmux — your key will be sent in the group chat. You don't need your own API key to get started.
+  </div>
+
+  <!-- Step list -->
+  <div class="section">
+    <div class="section-label"><i class="ti ti-list-check" style="font-size:13px;color:var(--accent)"></i> Setup steps</div>
+
+    <div class="step-list">
+
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-left">
+          <div class="step-dot active">1</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-meta">≈ 30–45 min</div>
+          <div class="step-title">Install LangChain, LangGraph &amp; dependencies</div>
+          <div class="step-desc">LangChain is the foundation library — LangGraph is built on top of it. You need both. The LangChain Academy course installs everything together in one go.</div>
+
+          <div class="warn-box" style="margin-top:12px;">
+            <div class="warn-header"><i class="ti ti-alert-triangle"></i> Python version — important</div>
+            <div class="warn-body">LangGraph requires <strong>Python 3.11, 3.12, or 3.13</strong>. Check yours before starting: <code>python3 --version</code>. If you're on 3.10 or below, upgrade Python first.</div>
+          </div>
+
+          <div style="margin-top:12px;">
+            <div class="resource-card">
+              <div class="resource-top">
+                <div>
+                  <div class="resource-label">Course — Required</div>
+                  <div class="resource-title">LangChain Academy — Intro to LangGraph</div>
+                </div>
+                <a class="resource-link" href="https://academy.langchain.com/courses/intro-to-langgraph" target="_blank">Open →</a>
+              </div>
+              <div class="resource-desc">Navigate to the <strong style="color:var(--text-primary);">Welcome to the course!</strong> section — this is where the installation instructions live. It walks you through setting up a virtual environment and installing all required dependencies.</div>
+              <ul class="checklist" style="margin-top:10px;">
+                <li><i class="ti ti-circle-check"></i><span>Go to the <strong style="color:var(--text-primary);">"Welcome to the course!"</strong> section for installation steps</span></li>
+                <li><i class="ti ti-circle-check"></i><span>Install <a href="https://code.visualstudio.com/" target="_blank" style="color:var(--accent);text-decoration:none;">Visual Studio Code</a> if you don't have a code editor — it's free and works well with Python and Jupyter notebooks</span></li>
+                <li><i class="ti ti-video"></i><span>If this is your first time setting up Python or LangChain, the <strong style="color:var(--text-primary);">video guide</strong> in the course is much easier to follow than the text instructions alone</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="outcome">
+            <i class="ti ti-circle-check"></i>
+            <span><code>python3 --version</code> shows 3.11–3.13, your virtual environment is active, and <code>pip show langgraph</code> returns a version number.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-left">
+          <div class="step-dot active">2</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-meta">≈ 10 min</div>
+          <div class="step-title">Test your connection via Zenmux</div>
+          <div class="step-desc">Run the notebook below to verify your environment is wired up correctly before you start building.</div>
+
+          <div class="info-box" style="margin-top:12px;">
+            <div class="info-header"><i class="ti ti-key"></i> API key</div>
+            <div class="info-body">Your Zenmux API key will be sent in the group chat. Replace <code>&lt;INSERT_API_KEY&gt;</code> in the notebook below before running.</div>
+          </div>
+
+          <div class="sublevel-label" style="margin-top:16px;">Install the required package</div>
+          <div class="code-wrap">
+            <button class="copy-btn" onclick="copyInstall()">Copy</button>
+            <pre class="code-block"><span class="c"># Make sure your virtual environment is active first, then:</span>
+pip install langchain-openai</pre>
+          </div>
+
+          <div class="sublevel-label" style="margin-top:16px;">Connection test notebook</div>
+          <div class="resource-card">
+            <div class="resource-top">
+              <div>
+                <div class="resource-label">Notebook — Required</div>
+                <div class="resource-title">Zenmux Connection Test</div>
+              </div>
+              <a class="resource-link" href="zenmux_connection_test.ipynb" download>Download →</a>
+            </div>
+            <div class="resource-desc">Download the notebook, open it in VS Code or Jupyter, insert your API key, and run all cells. Or copy the code below directly into a <code>.py</code> file.</div>
+          </div>
+
+          <div class="code-wrap">
+            <button class="copy-btn" id="copy-btn" onclick="copyZenmuxCode()">Copy</button>
+            <pre class="code-block"><span class="k">import</span> os
+<span class="k">from</span> langchain_openai <span class="k">import</span> ChatOpenAI
+
+<span class="c"># Initialize the ChatOpenAI model, pointing to the ZenMux gateway</span>
+llm = ChatOpenAI(
+    model=<span class="s">"gpt-4o"</span>,  <span class="c"># or claude-sonnet-4-5, gemini-3-pro, etc.</span>
+    temperature=<span class="s">0.2</span>,
+    openai_api_key=<span class="s">"&lt;INSERT_API_KEY&gt;"</span>,
+    openai_api_base=<span class="s">"https://zenmux.ai/api/v1"</span>  <span class="c"># ZenMux base URL</span>
+)
+
+<span class="c"># Use invoke to test your connection</span>
+response = llm.invoke(<span class="s">"What is the capital of Singapore?"</span>)
+<span class="k">print</span>(response.content)</pre>
+          </div>
+
+          <div class="tip-box">
+            <div class="tip-header"><i class="ti ti-bulb"></i> Note — <code>openai_api_base</code></div>
+            <div class="tip-body">The <code>openai_api_base</code> parameter is what redirects all API calls to Zenmux instead of OpenAI. Make sure this is set to <code>https://zenmux.ai/api/v1</code> — if it's missing or wrong, your calls will go to OpenAI and fail with an authentication error.</div>
+          </div>
+
+          <div class="tip-box" style="margin-top:8px;">
+            <div class="tip-header"><i class="ti ti-bulb"></i> Expected output</div>
+            <div class="tip-body">You should see: <code>The capital of Singapore is Singapore City.</code><br>If you get an authentication error, double-check your API key has no extra spaces.</div>
+          </div>
+
+          <div class="outcome" style="margin-top:8px;">
+            <i class="ti ti-circle-check"></i>
+            <span>The notebook runs without errors and prints a response. You're connected to Zenmux and ready to build.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-left">
+          <div class="step-dot active">3</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-meta">≈ 60 min</div>
+          <div class="step-title">Conceptual grounding</div>
+          <div class="step-desc">Understand the core mental model before you build — it'll save you a lot of confusion later.</div>
+
+          <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
+            <div class="resource-card">
+              <div class="resource-top">
+                <div>
+                  <div class="resource-label">Docs — Required</div>
+                  <div class="resource-title">LangGraph Overview</div>
+                </div>
+                <a class="resource-link" href="https://docs.langchain.com/oss/python/langgraph/overview" target="_blank">Open →</a>
+              </div>
+              <div class="resource-desc">Covers the core mental model: state graphs, nodes, edges, how agents loop between an LLM and tools. Start here.</div>
+            </div>
+
+            <div class="resource-card">
+              <div class="resource-top">
+                <div>
+                  <div class="resource-label">Course — Required</div>
+                  <div class="resource-title">LangChain Academy — Intro to LangGraph</div>
+                </div>
+                <a class="resource-link" href="https://academy.langchain.com/courses/intro-to-langgraph" target="_blank">Open →</a>
+              </div>
+              <div class="resource-desc">Focus on these four lessons only:</div>
+              <div class="focus-list">
+                <span class="focus-tag">Lesson 2 — Simple Graph</span>
+                <span class="focus-tag">Lesson 3 — LangSmith Studio</span>
+                <span class="focus-tag">Lesson 6 — Agent</span>
+                <span class="focus-tag">Lesson 7 — Agent with Memory</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="outcome">
+            <i class="ti ti-circle-check"></i>
+            <span>You can explain: "An agent is a graph where an LLM node decides when to call tools, and state tracks the conversation and intermediate results."</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-left">
+          <div class="step-dot active">4</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-meta">≈ 1.5–2 hrs</div>
+          <div class="step-title">Build a minimal agent</div>
+          <div class="step-desc">Work through the official tutorial to build a basic chatbot graph, then add a tool.</div>
+
+          <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
+            <div class="resource-card">
+              <div class="resource-top">
+                <div>
+                  <div class="resource-label">Tutorial — Required</div>
+                  <div class="resource-title">Official LangGraph "Get Started" Tutorial</div>
+                </div>
+                <a class="resource-link" href="https://langchain-ai.github.io/langgraph/tutorials/get-started/1-build-basic-chatbot/" target="_blank">Open →</a>
+              </div>
+              <ul class="checklist">
+                <li><i class="ti ti-circle-check"></i><span>Define a state schema (messages list)</span></li>
+                <li><i class="ti ti-circle-check"></i><span>Create a <code>StateGraph</code> with an LLM node</span></li>
+                <li><i class="ti ti-circle-check"></i><span>Add a tool node + conditional edge that routes between agent ↔ tools</span></li>
+                <li><i class="ti ti-alert-triangle" style="color:var(--amber);"></i><span><strong style="color:var(--text-primary);">v1.0 note:</strong> <code>create_react_agent</code> is deprecated — the current tutorial uses <code>StateGraph</code> directly</span></li>
+                <li><i class="ti ti-plug-connected" style="color:var(--blue-text);"></i><span>Wherever the tutorial uses <code>ChatOpenAI(...)</code>, you can use your Zenmux-connected instance from Step 2</span></li>
+              </ul>
+            </div>
+
+            <div class="resource-card">
+              <div class="resource-top">
+                <div>
+                  <div class="resource-label optional">Article — Optional</div>
+                  <div class="resource-title">How to Develop AI Agents Using LangGraph (freeCodeCamp)</div>
+                </div>
+                <a class="resource-link" href="https://www.freecodecamp.org/news/how-to-develop-ai-agents-using-langgraph-a-practical-guide/" target="_blank">Open →</a>
+              </div>
+              <div class="resource-desc">Full worked example with tools and multi-step reasoning — good if you want a second perspective.</div>
+            </div>
+
+            <div class="resource-card">
+              <div class="resource-top">
+                <div>
+                  <div class="resource-label optional">Video — Optional</div>
+                  <div class="resource-title">TechWithTim — LangGraph Tutorial: Advanced AI Agent Systems</div>
+                </div>
+                <a class="resource-link" href="https://www.youtube.com/watch?v=1w5cCXlh7JQ" target="_blank">Open →</a>
+              </div>
+              <div class="resource-desc">Visual walkthrough of environment setup → simple chatbot → complex tool-using agent.</div>
+            </div>
+          </div>
+
+          <div class="outcome">
+            <i class="ti ti-circle-check"></i>
+            <span>A Python script where you type a question → the agent decides whether to call a tool → executes it → returns a final answer.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step">
+        <div class="step-left">
+          <div class="step-dot active">5</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-meta">≈ 30–45 min</div>
+          <div class="step-title">Add LangSmith observability</div>
+          <div class="step-desc">Trace every LLM call and tool execution — no black boxes.</div>
+
+          <div class="info-box" style="margin-top:12px;">
+            <div class="info-header"><i class="ti ti-gift"></i> Free Developer Plan</div>
+            <div class="info-body">5,000 traces / month · 14-day retention · 1 seat · No credit card required. A trace = one full agent execution. Plenty for active development.</div>
+          </div>
+
+          <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
+            <div class="resource-card">
+              <div class="resource-top">
+                <div>
+                  <div class="resource-label">Setup — Required</div>
+                  <div class="resource-title">Sign up at smith.langchain.com</div>
+                </div>
+                <a class="resource-link" href="https://smith.langchain.com" target="_blank">Sign Up →</a>
+              </div>
+              <ul class="checklist">
+                <li><i class="ti ti-circle-check"></i><span>After login, go to <strong style="color:var(--text-primary);">Settings → API Keys</strong></span></li>
+                <li><i class="ti ti-circle-check"></i><span>Click <strong style="color:var(--text-primary);">Create API Key</strong> — copy it immediately (shown only once)</span></li>
+                <li><i class="ti ti-circle-check"></i><span>Optionally create a project (e.g. <code>my-langgraph-agent</code>) to group your runs</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sublevel-label" style="margin-top:16px;">Enable tracing via environment variables</div>
+          <div class="code-wrap">
+            <button class="copy-btn" onclick="copyLangsmith()">Copy</button>
+            <pre class="code-block"><span class="c"># .env  (or export in your shell)</span>
+<span class="s">LANGSMITH_API_KEY</span>=lsv2_pt_&lt;your-key-here&gt;
+<span class="s">LANGSMITH_TRACING</span>=true
+<span class="s">LANGCHAIN_PROJECT</span>=my-langgraph-agent</pre>
+          </div>
+
+          <div class="tip-box">
+            <div class="tip-header"><i class="ti ti-bulb"></i> Using Jupyter or Colab?</div>
+            <div class="tip-body">Set environment variables inline instead:<br>
+              <code>import os</code><br>
+              <code>os.environ["LANGSMITH_API_KEY"] = "lsv2_pt_..."</code><br>
+              <code>os.environ["LANGSMITH_TRACING"] = "true"</code>
+            </div>
+          </div>
+
+          <div class="outcome" style="margin-top:8px;">
+            <i class="ti ti-circle-check"></i>
+            <span>Run your agent, open smith.langchain.com, and see full traces — every LLM call, tool invocation, and state snapshot — on the free tier.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Going further: Ollama -->
+  <div class="section">
+    <div class="section-label"><i class="ti ti-arrow-right" style="font-size:13px;color:var(--accent)"></i> Going further — continue on your own</div>
+
+    <div class="further-banner">
+      <div class="further-banner-title">Want unlimited local inference?</div>
+      <p>The Zenmux API key has <strong>limited credits</strong>. If you want a free, unlimited alternative — whether before, during, or after the hackathon — use <strong>Ollama</strong>, a local LLM runner that works entirely offline with no API costs and no rate limits. The code is identical; only the model initialisation line changes.</p>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <div class="resource-card">
+        <div class="resource-top">
+          <div>
+            <div class="resource-label">Download — Required</div>
+            <div class="resource-title">Install Ollama</div>
+          </div>
+          <a class="resource-link" href="https://ollama.com/download" target="_blank">Download →</a>
+        </div>
+        <div class="resource-desc">One installer for macOS, Windows, and Linux. Runs as a background service on <code>http://localhost:11434</code> automatically.</div>
+        <ul class="checklist" style="margin-top:10px;">
+          <li><i class="ti ti-circle-check"></i><span><strong style="color:var(--text-primary);">macOS / Windows:</strong> download the installer and run it</span></li>
+          <li><i class="ti ti-circle-check"></i><span><strong style="color:var(--text-primary);">Linux:</strong> <code>curl -fsSL https://ollama.com/install.sh | sh</code></span></li>
+          <li><i class="ti ti-circle-check"></i><span>Verify: <code>ollama --version</code> should print a version string</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sublevel-label" style="margin-top:16px;">Pull a model (pick by RAM)</div>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyOllama()">Copy</button>
+      <pre class="code-block"><span class="c"># ≥ 8 GB RAM — recommended</span>
+ollama pull <span class="s">llama3.1:8b</span>
+
+<span class="c"># ≥ 16 GB RAM — better reasoning</span>
+ollama pull <span class="s">qwen3:8b</span>
+
+<span class="c"># Low RAM (4–8 GB)</span>
+ollama pull <span class="s">llama3.2:3b</span>
+
+<span class="c"># Confirm the model is ready:</span>
+ollama list</pre>
+    </div>
+
+    <div class="warn-box">
+      <div class="warn-header"><i class="ti ti-alert-triangle"></i> Tool calling note</div>
+      <div class="warn-body">Models smaller than 7B may inconsistently decide when to call tools. If your agent loops or ignores tools, switch to a larger model. <code>qwen3:8b</code> and <code>llama3.1:8b</code> are the most reliable choices.</div>
+    </div>
+
+    <div class="sublevel-label" style="margin-top:16px;">Swap one line in your agent</div>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyOllamaSwap()">Copy</button>
+      <pre class="code-block"><span class="c"># Install the integration package</span>
+pip install langchain-ollama
+
+<span class="c"># Replace this (Zenmux):</span>
+<span class="c"># from langchain_openai import ChatOpenAI</span>
+<span class="c"># llm = ChatOpenAI(model="gpt-4o", openai_api_key="...", openai_api_base="https://zenmux.ai/api/v1")</span>
+
+<span class="c"># With this (Ollama — no API key needed):</span>
+<span class="k">from</span> langchain_ollama <span class="k">import</span> ChatOllama
+llm = ChatOllama(model=<span class="s">"llama3.1:8b"</span>)  <span class="c"># or qwen3:8b</span>
+
+<span class="c"># Bind tools exactly the same way:</span>
+llm_with_tools = llm.bind_tools(tools)</pre>
+    </div>
+  </div>
+
+  <!-- Potential issues -->
+  <div class="section">
+    <div class="section-label"><i class="ti ti-alert-circle" style="font-size:13px;color:var(--accent)"></i> Potential issues</div>
+    <div class="prose-card">
+      <p><strong>⚠ <code>create_react_agent</code> deprecated in LangGraph v1.0</strong> — Replaced by <code>create_agent</code> or raw <code>StateGraph</code>. If you see <code>create_react_agent</code> in old blog posts, follow the official tutorial instead.</p>
+      <p><strong>⚠ LangGraph Platform renamed</strong> — As of Oct 2025, "LangGraph Platform" is now called <strong>LangSmith Deployment</strong>. This guide doesn't use deployment features, but be aware if you encounter the old name in docs or blog posts.</p>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="section">
+    <div class="section-label"><i class="ti ti-clock" style="font-size:13px;color:var(--accent)"></i> Recommended order</div>
+    <div class="timeline-table">
+      <div class="timeline-row" style="background:var(--bg-card);">
+        <div class="tl-phase">Setup</div>
+        <div class="tl-time">≈ 45 min</div>
+        <div class="tl-task">LangChain Academy "Welcome" section → install Python 3.11+ → follow video guide</div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-phase">Test</div>
+        <div class="tl-time">≈ 10 min</div>
+        <div class="tl-task">Insert Zenmux API key → run connection notebook → confirm response prints</div>
+      </div>
+      <div class="timeline-row" style="background:var(--bg-card);">
+        <div class="tl-phase">Concepts</div>
+        <div class="tl-time">≈ 1 hr</div>
+        <div class="tl-task">LangGraph overview docs → LangChain Academy lessons (Simple Graph, Agent, Agent with Memory)</div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-phase">Build</div>
+        <div class="tl-time">≈ 2 hrs</div>
+        <div class="tl-task">LangGraph "Get Started" tutorial → chatbot → tool-using agent with conditional routing</div>
+      </div>
+      <div class="timeline-row" style="background:var(--bg-card);">
+        <div class="tl-phase">Observe</div>
+        <div class="tl-time">≈ 45 min</div>
+        <div class="tl-task">Enable LangSmith via env vars → run agent → inspect traces</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="footer-text"><i class="ti ti-clock"></i> Last updated: <span id="last-updated"></span></span>
+    <span class="footer-text"><i class="ti ti-code"></i> AI-Enabled Engineering Hackathon 2026</span>
+  </div>
+
+</div>
+
+<script>
+document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-SG', { day: 'numeric', month: 'long', year: 'numeric' });
+
+function copyZenmuxCode() {
+  var code = [
+    'import os',
+    'from langchain_openai import ChatOpenAI',
+    '',
+    '# Initialize the ChatOpenAI model, pointing to the ZenMux gateway',
+    'llm = ChatOpenAI(',
+    '    model="gpt-4o",  # or claude-sonnet-4-5, gemini-3-pro, etc.',
+    '    temperature=0.2,',
+    '    openai_api_key="<INSERT_API_KEY>",',
+    '    openai_api_base="https://zenmux.ai/api/v1"  # ZenMux base URL',
+    ')',
+    '',
+    '# Use invoke to test your connection',
+    'response = llm.invoke("What is the capital of Singapore?")',
+    'print(response.content)'
+  ].join('\n');
+  navigator.clipboard.writeText(code);
+  var btn = document.getElementById('copy-btn');
+  btn.textContent = 'Copied!';
+  setTimeout(function(){ btn.textContent = 'Copy'; }, 2000);
+}
+
+function copyInstall() {
+  navigator.clipboard.writeText('pip install langchain-openai');
+  event.target.textContent = 'Copied!';
+  setTimeout(function(){ event.target.textContent = 'Copy'; }, 2000);
+}
+
+function copyLangsmith() {
+  var code = 'LANGSMITH_API_KEY=lsv2_pt_<your-key-here>\nLANGSMITH_TRACING=true\nLANGCHAIN_PROJECT=my-langgraph-agent';
+  navigator.clipboard.writeText(code);
+  event.target.textContent = 'Copied!';
+  setTimeout(function(){ event.target.textContent = 'Copy'; }, 2000);
+}
+
+function copyOllama() {
+  var code = 'ollama pull llama3.1:8b\n# or\nollama pull qwen3:8b\n# or\nollama pull llama3.2:3b\n\nollama list';
+  navigator.clipboard.writeText(code);
+  event.target.textContent = 'Copied!';
+  setTimeout(function(){ event.target.textContent = 'Copy'; }, 2000);
+}
+
+function copyOllamaSwap() {
+  var code = [
+    'pip install langchain-ollama',
+    '',
+    '# Replace this (Zenmux):',
+    '# from langchain_openai import ChatOpenAI',
+    '# llm = ChatOpenAI(model="gpt-4o", openai_api_key="...", openai_api_base="https://zenmux.ai/api/v1")',
+    '',
+    '# With this (Ollama — no API key needed):',
+    'from langchain_ollama import ChatOllama',
+    'llm = ChatOllama(model="llama3.1:8b")  # or qwen3:8b',
+    '',
+    '# Bind tools exactly the same way:',
+    'llm_with_tools = llm.bind_tools(tools)'
+  ].join('\n');
+  navigator.clipboard.writeText(code);
+  event.target.textContent = 'Copied!';
+  setTimeout(function(){ event.target.textContent = 'Copy'; }, 2000);
+}
+</script>
+
+</body>
+</html>
