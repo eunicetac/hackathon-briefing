@@ -40,6 +40,11 @@
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; padding: 3rem 1.5rem 4rem; }
     .container { max-width: 740px; margin: 0 auto; }
 
+    /* Back nav */
+    .back-nav { display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-tertiary); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; display: block; }
+    .back-nav:hover { color: var(--accent); }
+    .back-nav i { font-size: 13px; }
+
     /* Hero */
     .hero { margin-bottom: 2.5rem; }
     .badge { display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent-bg); color: var(--accent-text); border: 1px solid #1a4d30; padding: 5px 12px; border-radius: 6px; margin-bottom: 1.25rem; }
@@ -164,7 +169,7 @@
 
   <!-- Hero -->
   <div class="hero">
-    <a style="display:inline-flex;align-items:center;gap:6px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);text-decoration:none;margin-bottom:2rem;transition:color 0.2s;" href="https://eunicetac.github.io/hackathon-briefing/" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-tertiary)'"><i class="ti ti-arrow-left" style="font-size:13px;"></i> Back to hackathon home</a>
+    <a class="back-nav" href="https://eunicetac.github.io/hackathon-briefing/"><i class="ti ti-arrow-left"></i> Back to hackathon home</a>
     <div class="badge"><i class="ti ti-brand-python"></i> Developer Setup Guide</div>
     <h1>LangChain <span>+</span> LangGraph <span>+</span> LangSmith</h1>
     <p>LangChain is the base library. LangGraph builds on top of it to orchestrate agents. LangSmith traces and debugs them. This guide gets all three set up.</p>
