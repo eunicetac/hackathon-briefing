@@ -57,6 +57,12 @@
     .nav-link:hover { color: var(--accent); }
     .nav-link i { font-size: 13px; }
     .nav-link.home { color: var(--accent); }
+    .link-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; text-decoration: none; display: flex; flex-direction: column; gap: 6px; transition: border-color 0.2s, background 0.2s; }
+    .link-card:hover { border-color: var(--border-bright); background: var(--bg-card-hover); }
+    .card-icon { font-size: 20px; color: var(--accent); margin-bottom: 2px; }
+    .card-title { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+    .card-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; flex: 1; }
+    .card-arrow { font-size: 11px; color: var(--accent); display: flex; align-items: center; gap: 4px; margin-top: 4px; font-family: 'Space Mono', monospace; letter-spacing: 0.06em; }
   </style>
 </head>
 <body>
@@ -111,6 +117,25 @@
         <div class="tier-item">Implement an agentic code review assistant trained on C3 engineering standards that intercepts pull requests, identifies toil patterns and standard deviations, and proposes concrete remediations before human review.</div>
         <div class="tier-item">Build an MCP-connected developer agent that monitors C3 pipeline activity in real-time, proactively surfaces emerging toil patterns across the team, and auto-generates fixes or templates for repeated issues.</div>
       </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><i class="ti ti-books" style="font-size:13px;color:var(--accent)"></i> Reference materials</div>
+
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <a class="link-card" href="https://github.com/pinardy/code-desensitizer-for-airgap" target="_blank" rel="noopener">
+        <i class="ti ti-brand-github card-icon"></i>
+        <div class="card-title">Code Desensitizer for Airgap Environments</div>
+        <div class="card-desc">A worked example of using AI tools to automate a repetitive, toil-heavy engineering task — study the approach and development process as inspiration</div>
+        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
+      </a>
+      <a class="link-card" href="Code_Desensitizer_for_Generating_Test_Cases.pdf" target="_blank">
+        <i class="ti ti-file-description card-icon"></i>
+        <div class="card-title">Code Desensitizer — Pinardy Yang, May 2026</div>
+        <div class="card-desc">Presentation covering the problem, solution workflow, demo, and honest AI tool reflections — Claude + Copilot, ~1000-line script built in half a day</div>
+        <div class="card-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
+      </a>
     </div>
   </div>
 
