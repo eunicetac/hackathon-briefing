@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PS3 Starter Pack — C3 Integration Gateway</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #111111; --bg-card: #1e1e1e; --bg-card-hover: #252525; --bg-subtle: #1a1a1a;
+      --border: #2e2e2e; --border-bright: #3a3a3a;
+      --text-primary: #f0f0f0; --text-secondary: #b0b0b0; --text-tertiary: #888888;
+      --accent: #3ecf8e; --accent-bg: #0d2e1e; --accent-text: #6ee7b7;
+      --green: #3ecf8e; --green-bg: #0d2e1e; --green-text: #6ee7b7;
+      --amber: #f59e0b; --amber-bg: #2a1f08; --amber-text: #fcd34d;
+      --red: #ef4444; --red-bg: #2a0f0f; --red-text: #fca5a5;
+      --blue: #5c6fff; --blue-bg: #0d1220; --blue-text: #a5b4fc;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; padding: 3rem 1.5rem 4rem; }
+    .container { max-width: 740px; margin: 0 auto; }
+    .back-nav { display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-tertiary); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
+    .back-nav:hover { color: var(--accent); }
+    .back-nav i { font-size: 13px; }
+    .hero { margin-bottom: 2.5rem; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent-bg); color: var(--accent-text); border: 1px solid #1a4d30; padding: 5px 12px; border-radius: 6px; margin-bottom: 1.25rem; }
+    .hero h1 { font-family: 'Space Mono', monospace; font-size: 26px; font-weight: 700; color: #f0f0f0; line-height: 1.35; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+    .hero h1 span { color: var(--accent); }
+    .hero p { font-size: 15px; color: var(--text-secondary); line-height: 1.75; font-weight: 300; }
+    .section { margin-bottom: 2.5rem; }
+    .section-label { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .sublevel-label { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; margin-top: 1.25rem; }
+    .prose-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; font-size: 14px; color: var(--text-secondary); line-height: 1.75; }
+    .prose-card p { margin-bottom: 0.75rem; }
+    .prose-card p:last-child { margin-bottom: 0; }
+    .prose-card strong { color: var(--text-primary); font-weight: 500; }
+    code { font-family: 'Space Mono', monospace; font-size: 11px; background: var(--bg-subtle); padding: 1px 5px; border-radius: 3px; color: var(--text-secondary); }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    thead tr { background: var(--bg-subtle); }
+    th { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-tertiary); padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); font-weight: 700; white-space: nowrap; }
+    td { padding: 10px 12px; color: var(--text-secondary); border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) { background: var(--bg-subtle); }
+    td strong { color: var(--text-primary); font-weight: 500; }
+    td code { font-size: 11px; }
+    .tag-m { color: var(--accent); font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; }
+    .tag-o { color: var(--amber-text); font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; }
+    .tag-x { color: var(--text-tertiary); font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; }
+
+    /* Code block */
+    .code-wrap { position: relative; margin-top: 8px; }
+    .code-block { background: var(--bg-subtle); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; padding-top: 2.5rem; font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text-secondary); overflow-x: auto; white-space: pre; line-height: 1.7; }
+    .code-block .k { color: #a5b4fc; }
+    .code-block .s { color: var(--accent); }
+    .code-block .c { color: #444466; }
+    .code-block .n { color: var(--amber-text); }
+    .copy-btn { position: absolute; top: 8px; right: 8px; background: var(--bg-card); border: 1px solid var(--border); color: var(--accent); font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.08em; padding: 3px 10px; border-radius: 4px; cursor: pointer; transition: background 0.2s, color 0.2s; z-index: 2; }
+    .copy-btn:hover { background: var(--accent); color: var(--bg); }
+
+    /* Resource card */
+    .resource-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 8px; transition: border-color 0.2s, background 0.2s; text-decoration: none; display: flex; flex-direction: column; gap: 6px; }
+    .resource-card:hover { border-color: var(--border-bright); background: var(--bg-card-hover); }
+    .resource-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); }
+    .resource-title { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+    .resource-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+    .resource-arrow { font-size: 11px; color: var(--accent); display: flex; align-items: center; gap: 4px; margin-top: 4px; font-family: 'Space Mono', monospace; letter-spacing: 0.06em; }
+
+    /* Tip / info boxes */
+    .tip-box { background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin-top: 8px; }
+    .tip-header { font-size: 12px; font-weight: 600; color: var(--accent); font-family: 'Space Mono', monospace; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .tip-header i { font-size: 14px; }
+    .tip-body { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+    .tip-body strong { color: var(--text-primary); font-weight: 500; }
+    .warn-box { background: var(--amber-bg); border: 1px solid rgba(245,158,11,0.25); border-left: 3px solid var(--amber); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin-top: 8px; }
+    .warn-header { font-size: 12px; font-weight: 600; color: var(--amber-text); font-family: 'Space Mono', monospace; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .warn-body { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+
+    /* Footer */
+    .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .footer-text { font-size: 11px; color: var(--text-tertiary); font-family: 'Space Mono', monospace; display: flex; align-items: center; gap: 6px; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-nav" href="ps3.html"><i class="ti ti-arrow-left"></i> Back to PS3</a>
+
+  <div class="hero">
+    <div class="badge"><i class="ti ti-package"></i> PS3 Starter Pack</div>
+    <h1>C3 Integration <span>Gateway</span> — Starter Materials</h1>
+    <p>Everything you need to understand the message schemas, connection protocol, and ASTERIX standard before you start building.</p>
+  </div>
+
+  <!-- ── SECTION 1: OVERVIEW ─────────────────────────────── -->
+  <div class="section">
+    <div class="section-label"><i class="ti ti-info-circle" style="font-size:13px;color:var(--accent)"></i> How messages work in this system</div>
+    <div class="prose-card">
+      <p>Messages in this C3 system are sent in <strong>binary format over a Kafka broker</strong>. Before a system can publish or subscribe to data, it must first send a <strong>Connection Request</strong> to establish a session with the broker.</p>
+      <p>Each binary message follows an <strong>FSPEC (Field Specification)</strong> pattern — a bitmask at the start of the message that tells the receiver which fields are present. Fields marked <strong>M (Mandatory)</strong> are always present. Fields marked <strong>O (Optional)</strong> may or may not be present depending on the FSPEC. Fields marked <strong>X (Excluded)</strong> are reserved and not used.</p>
+      <p>Your challenge is to build an agent that can <strong>interpret a plain-language or structured integration requirement</strong> and generate the correct binary gateway code to encode and send these messages.</p>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: CONNECTION REQUEST ──────────────────── -->
+  <div class="section">
+    <div class="section-label"><i class="ti ti-plug-connected" style="font-size:13px;color:var(--accent)"></i> Message schema 1 — Connection Request</div>
+
+    <div class="prose-card" style="margin-bottom:12px;">
+      <p><strong>Purpose:</strong> Establishes a connection to the Kafka broker before any data can be published or subscribed to. Must be sent first.</p>
+      <p><strong>Transport:</strong> Binary over Kafka. <strong>Topic 10</strong> = Aerodrome topic. <strong>Connection ID:</strong> use <code>0</code>. <strong>System ID:</strong> use <code>15000</code>.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Field ID</th>
+            <th>Field Name</th>
+            <th>Data Type</th>
+            <th>Bytes</th>
+            <th>Range / Values</th>
+            <th>M/O</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>—</td><td><strong>FSPEC</strong></td><td><code>unsigned</code></td><td>1</td><td>Bitmask — see FSPEC table</td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>1</td><td><strong>Topic</strong></td><td><code>unsigned</code></td><td>2</td><td>0–65535. Use <code>10</code> for Aerodrome topic</td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>2</td><td><strong>Connection ID</strong></td><td><code>unsigned</code></td><td>2</td><td>Use <code>0</code></td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>3</td><td><strong>Kind of Connection</strong></td><td><code>unsigned</code></td><td>1</td><td><code>1</code> = Publisher, <code>2</code> = Subscriber</td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>4</td><td><strong>System ID</strong></td><td><code>unsigned</code></td><td>2</td><td>Use <code>15000</code></td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>5</td><td><strong>System Mode</strong></td><td><code>unsigned</code></td><td>1</td><td><code>1</code> = Operational, <code>2</code> = Simulation</td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>6</td><td>R.E. Field</td><td>—</td><td>—</td><td>Reserved expansion</td><td><span class="tag-o">O</span></td></tr>
+          <tr><td>7</td><td>S.P. Field</td><td>—</td><td>—</td><td>Special purpose</td><td><span class="tag-o">O</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sublevel-label">Example — encode a Connection Request (Subscriber, Operational)</div>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode('conn-code', this)">Copy</button>
+      <pre class="code-block" id="conn-code"><span class="k">import</span> struct
+
+<span class="c"># FSPEC: fields 1–5 all mandatory (bits 7–3 set = 0b11111000 = 0xF8)</span>
+fspec   = <span class="n">0xF8</span>
+topic   = <span class="n">10</span>      <span class="c"># Aerodrome topic</span>
+conn_id = <span class="n">0</span>       <span class="c"># Connection ID</span>
+kind    = <span class="n">2</span>       <span class="c"># Subscriber</span>
+sys_id  = <span class="n">15000</span>   <span class="c"># System ID</span>
+mode    = <span class="n">1</span>       <span class="c"># Operational</span>
+
+msg = struct.pack(
+    <span class="s">'>BHHBHB'</span>,   <span class="c"># big-endian: 1B fspec, 2B topic, 2B conn_id, 1B kind, 2B sys_id, 1B mode</span>
+    fspec, topic, conn_id, kind, sys_id, mode
+)
+
+<span class="k">print</span>(<span class="s">f"Connection Request ({len(msg)} bytes): {msg.hex().upper()}"</span>)
+<span class="c"># Expected: F8 000A 0000 02 3A98 01</span></pre>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: AERODROME MESSAGE ───────────────────── -->
+  <div class="section">
+    <div class="section-label"><i class="ti ti-plane" style="font-size:13px;color:var(--accent)"></i> Message schema 2 — Aerodrome</div>
+
+    <div class="prose-card" style="margin-bottom:12px;">
+      <p><strong>Purpose:</strong> Published as a Kafka message to subscribers with the latest aerodrome data. Contains position, boundary, timing, and identity fields.</p>
+      <p><strong>Key encoding rules:</strong> Aerodrome Name is a fixed <strong>10-character string</strong> padded with spaces. Timestamps are <strong>milliseconds since Unix epoch (UTC midnight 1/1/1970)</strong>. Position coordinates are in <strong>arc-milliseconds</strong>. CRC is a <strong>SHA-256 hash</strong> of the full payload excluding the CRC field itself.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Field ID</th>
+            <th>Field Name</th>
+            <th>Data Type</th>
+            <th>Bytes</th>
+            <th>Range / Notes</th>
+            <th>M/O</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>—</td><td><strong>FSPEC</strong></td><td><code>unsigned</code></td><td>2</td><td>Bitmask — 2 bytes for this message</td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>1</td><td><strong>Aerodrome ID</strong></td><td><code>unsigned</code></td><td>8</td><td>0–100,000. Use running number</td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>2</td><td><strong>Last Update Time</strong></td><td><code>unsigned</code></td><td>8</td><td>ms since Unix epoch</td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>3</td><td><strong>Aerodrome Name</strong></td><td><code>10-char string</code></td><td>10</td><td>Alphanumeric, pad with spaces</td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>4</td><td><strong>Aerodrome Type</strong></td><td><code>unsigned</code></td><td>1</td><td><code>1</code> = Public, <code>2</code> = Private</td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>5</td><td><strong>Aerodrome Start Time</strong></td><td><code>signed</code></td><td>8</td><td>ms since epoch. <code>-1</code> = no statement</td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>6</td><td><strong>Aerodrome End Time</strong></td><td><code>signed</code></td><td>8</td><td>ms since epoch</td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>7</td><td><strong>Upper Boundary</strong></td><td><code>unsigned</code></td><td>2</td><td>0–5000 feet</td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>8</td><td><strong>Lower Boundary</strong></td><td><code>unsigned</code></td><td>2</td><td>0–5000 feet</td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>9</td><td><strong>Aerodrome Position</strong></td><td>repeating</td><td>variable</td><td>1B count (3–100), then N × (4B lon + 4B lat) in arc-ms</td><td><span class="tag-m">M</span></td></tr>
+          <tr><td>10</td><td><strong>CRC</strong></td><td><code>char string</code></td><td>32</td><td>SHA-256 of full payload excluding CRC</td><td><span class="tag-m">M</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sublevel-label">Example — encode an Aerodrome message</div>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode('aero-code', this)">Copy</button>
+      <pre class="code-block" id="aero-code"><span class="k">import</span> struct, hashlib, time
+
+<span class="c"># FSPEC: fields 1–10 all mandatory</span>
+<span class="c"># Byte 1: fields 1–7 set (bits 7–1) + FX bit = 0b11111111 = 0xFF</span>
+<span class="c"># Byte 2: fields 8–10 set (bits 7–5) = 0b11100000 = 0xE0</span>
+fspec = <span class="n">0xFF</span>, <span class="n">0xE0</span>
+
+aerodrome_id   = <span class="n">1</span>
+now_ms         = <span class="k">int</span>(time.time() * <span class="n">1000</span>)
+name           = <span class="s">b'CHANGI    '</span>   <span class="c"># 10 bytes, space-padded</span>
+aero_type      = <span class="n">1</span>              <span class="c"># Public</span>
+start_time     = now_ms
+end_time       = now_ms + <span class="n">86400000</span>  <span class="c"># +24 hours</span>
+upper_boundary = <span class="n">500</span>           <span class="c"># feet</span>
+lower_boundary = <span class="n">0</span>
+
+<span class="c"># Position: 4 polygon points (lon/lat in arc-milliseconds)</span>
+<span class="c"># Singapore approx: 103.8°E, 1.35°N</span>
+<span class="c"># 103.8° × 3600000 ms/° = 373,680,000 arc-ms</span>
+points = [
+    (<span class="n">373_680_000</span>, <span class="n">4_860_000</span>),
+    (<span class="n">373_800_000</span>, <span class="n">4_860_000</span>),
+    (<span class="n">373_800_000</span>, <span class="n">4_740_000</span>),
+    (<span class="n">373_680_000</span>, <span class="n">4_740_000</span>),
+]
+
+<span class="c"># Build payload (without CRC)</span>
+payload = struct.pack(<span class="s">'>BB'</span>, *fspec)
+payload += struct.pack(<span class="s">'>Q'</span>, aerodrome_id)
+payload += struct.pack(<span class="s">'>Q'</span>, now_ms)
+payload += name
+payload += struct.pack(<span class="s">'>B'</span>, aero_type)
+payload += struct.pack(<span class="s">'>q'</span>, start_time)
+payload += struct.pack(<span class="s">'>q'</span>, end_time)
+payload += struct.pack(<span class="s">'>H'</span>, upper_boundary)
+payload += struct.pack(<span class="s">'>H'</span>, lower_boundary)
+payload += struct.pack(<span class="s">'>B'</span>, <span class="k">len</span>(points))
+<span class="k">for</span> lon, lat <span class="k">in</span> points:
+    payload += struct.pack(<span class="s">'>ii'</span>, lon, lat)
+
+<span class="c"># Append SHA-256 CRC</span>
+crc = hashlib.sha256(payload).digest()   <span class="c"># 32 bytes</span>
+full_msg = payload + crc
+
+<span class="k">print</span>(<span class="s">f"Aerodrome message ({len(full_msg)} bytes)"</span>)
+<span class="k">print</span>(<span class="s">f"Hex: {full_msg.hex().upper()}"</span>)</pre>
+    </div>
+
+    <div class="tip-box">
+      <div class="tip-header"><i class="ti ti-bulb"></i> Coordinate conversion tip</div>
+      <div class="tip-body">To convert decimal degrees to arc-milliseconds: <strong>multiply by 3,600,000</strong>. E.g. 103.8°E × 3,600,000 = 373,680,000. To convert back: divide by 3,600,000.</div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 4: CONNECTION TYPES ────────────────────── -->
+  <div class="section">
+    <div class="section-label"><i class="ti ti-network" style="font-size:13px;color:var(--accent)"></i> Connection types — Publisher vs Subscriber</div>
+
+    <div class="prose-card" style="margin-bottom:12px;">
+      <p>The <strong>Kind of Connection</strong> field in the Connection Request determines how your system interacts with the broker. Choose the right mode for your use case:</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Value</th><th>Type</th><th>Description</th><th>Use when</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>1</code></td>
+            <td><strong>Publisher</strong></td>
+            <td>Sends messages to the broker on a topic</td>
+            <td>Your system generates aerodrome data and pushes it out</td>
+          </tr>
+          <tr>
+            <td><code>2</code></td>
+            <td><strong>Subscriber</strong></td>
+            <td>Receives messages from the broker on a topic</td>
+            <td>Your system consumes aerodrome data from another source</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="warn-box">
+      <div class="warn-header"><i class="ti ti-alert-triangle"></i> Important</div>
+      <div class="warn-body">The Connection Request must be sent and acknowledged before any Aerodrome messages can be published or received. Your gateway code should handle the connection handshake as a first step.</div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 5: ASTERIX REFERENCE ───────────────────── -->
+  <div class="section">
+    <div class="section-label"><i class="ti ti-file-code" style="font-size:13px;color:var(--accent)"></i> ASTERIX standard — reference &amp; decoders</div>
+
+    <div class="prose-card" style="margin-bottom:12px;">
+      <p>The message schemas above follow conventions from the <strong>EUROCONTROL ASTERIX (All Purpose STructured EUROCONTROL SuRveillance Information EXchange)</strong> standard — a binary messaging format widely used in ATM surveillance systems. Familiarity with ASTERIX will help you understand the FSPEC pattern, field encoding, and binary layout used in this starter pack.</p>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <a class="resource-card" href="https://www.eurocontrol.int/asterix" target="_blank" rel="noopener">
+        <div class="resource-label">Official Standard</div>
+        <div class="resource-title">EUROCONTROL ASTERIX — Official Specification</div>
+        <div class="resource-desc">The authoritative source for ASTERIX category definitions, encoding rules, and field specifications. Reference this when you need to understand how fields are structured at the bit level.</div>
+        <div class="resource-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open</div>
+      </a>
+
+      <a class="resource-card" href="https://github.com/CroatiaControlLtd/asterix" target="_blank" rel="noopener">
+        <div class="resource-label">Open Source Decoder — Python + C</div>
+        <div class="resource-title">Croatia Control ASTERIX Decoder</div>
+        <div class="resource-desc">Python module and standalone application for reading and parsing EUROCONTROL ASTERIX protocol data from stdin, file, or network multicast stream. Outputs to text, XML, or JSON. Developed and maintained by Croatia Control Ltd. Use this to validate your encoded messages.</div>
+        <div class="resource-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open on GitHub</div>
+      </a>
+
+      <a class="resource-card" href="https://github.com/filipjonckers/asterix4py" target="_blank" rel="noopener">
+        <div class="resource-label">Open Source Decoder — Pure Python</div>
+        <div class="resource-title">asterix4py — Pure Python ASTERIX Decoder</div>
+        <div class="resource-desc">Lightweight, pure Python library for parsing and decoding EUROCONTROL ASTERIX binary data. Easier to integrate into a Python project than the C-based decoder. Install via <code>pip install asterix4py</code>. Sample files and code examples included.</div>
+        <div class="resource-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open on GitHub</div>
+      </a>
+
+      <a class="resource-card" href="https://pypi.org/project/asterix-decoder/" target="_blank" rel="noopener">
+        <div class="resource-label">PyPI Package</div>
+        <div class="resource-title">asterix-decoder on PyPI</div>
+        <div class="resource-desc">Install the ASTERIX decoder as a Python package: <code>pip install asterix_decoder</code>. Reads from stdin, file, or network stream and parses all ASTERIX categories via XML definition files.</div>
+        <div class="resource-arrow"><i class="ti ti-external-link" style="font-size:11px;"></i> Open on PyPI</div>
+      </a>
+    </div>
+
+    <div class="sublevel-label" style="margin-top:1.25rem;">Quick validation — decode your message with asterix4py</div>
+    <div class="code-wrap">
+      <button class="copy-btn" onclick="copyCode('decode-code', this)">Copy</button>
+      <pre class="code-block" id="decode-code"><span class="c"># Install first: pip install asterix4py</span>
+<span class="k">from</span> asterix4py <span class="k">import</span> AsterixParser
+
+<span class="c"># Pass your encoded binary message to validate it</span>
+parser = AsterixParser()
+result = parser.parse(full_msg)   <span class="c"># full_msg from the Aerodrome example above</span>
+<span class="k">print</span>(result)</pre>
+    </div>
+  </div>
+
+  <!-- ── SECTION 6: WHAT TO BUILD ───────────────────────── -->
+  <div class="section">
+    <div class="section-label"><i class="ti ti-target" style="font-size:13px;color:var(--accent)"></i> What your agent should be able to do</div>
+    <div class="prose-card">
+      <p>Use these starter materials as inputs to train or prompt your agent. A strong submission will demonstrate an agent that can:</p>
+      <p><strong>1. Interpret a plain-language requirement</strong> — e.g. "create a subscriber connection to the aerodrome topic in simulation mode" → generate the correct binary Connection Request.</p>
+      <p><strong>2. Generate valid binary gateway code</strong> — correct field order, data types, byte lengths, FSPEC bitmask, and SHA-256 CRC.</p>
+      <p><strong>3. Handle ambiguity</strong> — if a requirement is underspecified (e.g. "connect to the broker" without specifying Publisher or Subscriber), the agent should ask a clarifying question rather than assume.</p>
+      <p><strong>4. Validate output</strong> — use the ASTERIX decoder libraries above to verify that generated messages can be parsed back correctly.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="footer-text"><i class="ti ti-clock"></i> Last updated: <span id="last-updated"></span></span>
+    <span class="footer-text"><i class="ti ti-code"></i> AI-Enabled Engineering Hackathon 2026</span>
+  </div>
+
+</div>
+
+<script>
+document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-SG', { day: 'numeric', month: 'long', year: 'numeric' });
+
+function copyCode(id, btn) {
+  var el = document.getElementById(id);
+  var text = el.innerText || el.textContent;
+  navigator.clipboard.writeText(text);
+  btn.textContent = 'Copied!';
+  setTimeout(function(){ btn.textContent = 'Copy'; }, 2000);
+}
+</script>
+
+</body>
+</html>
