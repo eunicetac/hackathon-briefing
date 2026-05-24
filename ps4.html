@@ -49,10 +49,15 @@
     .tier-items { display: flex; flex-direction: column; gap: 6px; padding-left: 16px; }
     .tier-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; font-size: 14px; color: var(--text-secondary); line-height: 1.65; transition: border-color 0.2s, background 0.2s; }
     .tier-item:hover { border-color: var(--border-bright); background: var(--bg-card-hover); }
+    .back-nav { display: inline-flex; align-items: center; gap: 6px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-tertiary); text-decoration: none; margin-bottom: 2rem; transition: color 0.2s; }
+    .back-nav:hover { color: var(--accent); }
+    .back-nav i { font-size: 13px; }
   </style>
 </head>
 <body>
 <div class="container">
+
+  <a class="back-nav" href="index.html"><i class="ti ti-arrow-left"></i> All problem statements</a>
 
   <div class="hero">
     <div class="badge"><i class="ti ti-robot"></i> Problem Statement 04</div>
